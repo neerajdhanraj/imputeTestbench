@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Neeraj Bokde" />
+
+<meta name="date" content="2016-04-17" />
+
+<title>imputeTestbench : Test bench for Missing Data Imputing Models/Methods Comparison</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div class="fluid-row" id="header">
+
+
+<h1 class="title">imputeTestbench : Test bench for Missing Data Imputing Models/Methods Comparison</h1>
+<h4 class="author"><em>Neeraj Bokde</em></h4>
+<h4 class="date"><em>2016-04-17</em></h4>
+
+</div>
+
+
+<p>This Document is to introduce the R package ‘imputeTestbench’. It is an testing workbench for comparison of missing data imptation models/methods. It compares imputing methods with reference to RMSE, MAE or MAPE parameters. It allows to add new proposed methods to test bench and to compare with other methods. The function <code>append_method()</code> allows to add multiple numbers of methods to the existing methods available in test bench.</p>
+<p>Following example describs the working of this package:</p>
+<p>Consider a sample data <code>datax</code> as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datax &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>,<span class="dv">1</span>:<span class="dv">5</span>)</code></pre></div>
+<p>Import library for Package <code>imputeTestbench</code> as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(imputeTestbench)</code></pre></div>
+<p>The function <code>impute_errors()</code> is used to compare imputing methods with reference to RMSE, MAE or MAPE parameters. Syntax of `impute_errors()’ as shown below:</p>
+<p><code>impute_errors(dataIn, missPercentFrom, missPercentTo, interval, repetition, errorParameter, MethodPath, MethodName)</code></p>
+<p>where,</p>
+<ul>
+<li><code>dataIn</code> is imput time series for testing</li>
+<li><code>missPercentFrom</code> is variable from which percent of missing values to be considered</li>
+<li><code>missPercentTo</code> is variable to state upto what percent missing values are to be considered</li>
+<li><code>interval</code> is interval between consecutive missPercent values</li>
+<li><code>repetition</code> is an integer to decide the numbers of repetition to be done for each missPercent value</li>
+<li><code>errorParameter</code> is type of error calculation (RMSE, MAE or MAPE)</li>
+<li><code>MethodPath</code> is location of function for the proposed imputation method</li>
+<li><code>MethodName</code> is name for function for the proposed imputation method</li>
+</ul>
+<p>At simplest form, function <code>impute_errors()</code> can we used as:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q &lt;-<span class="st"> </span><span class="kw">impute_errors</span>(datax)
+q</code></pre></div>
+<pre><code>## $Parameter
+## [1] &quot;RMSE Plot&quot;
+## 
+## $Missing_Percent
+## [1] 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8
+## 
+## $Historic_Mean
+## [1] 0.4474533 0.6564378 0.7624110 0.9018024 0.9856108 1.0969543 1.1814683
+## [8] 1.2724180
+## 
+## $Interpolation
+## [1] 0.5750546 0.6546537 0.9420435 1.1296860 1.2714936 1.9272482 2.0701967
+## [8] 2.2038927</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_errors</span>(q)</code></pre></div>
+<p><img src="data:image/png;base64,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" alt /></p>
+<p>By default, this function compares two basic imputation methods, i.e. Historical means and Interpolation methods. The <code>plot_errors()</code> function is used to plot the comparison plots between different methods. This test bench allows to add one more imputing method to compare with already existing methods. The only care is to be takes as, the new imputing method is to be designed in function format such that it could return imputed data as output. Suppose, following function is the desired method to add in test bench.</p>
+<p><code>===============================</code></p>
+<p><code>inter &lt;- function(outs)</code></p>
+<p><code>{</code></p>
+<p><code>library(imputeTS)</code></p>
+<p><code>outs &lt;- ts(outs)</code></p>
+<p><code>d &lt;- na.random(outs)</code></p>
+<p><code>return(d)</code></p>
+<p><code>}</code></p>
+<p><code>===============================</code></p>
+<p>Save this function in new R script file and save it and note its Source location similar to <code>&quot;source('~/imputeTestbench/R/inter.R')&quot;</code> and use ’impute_errors()` function as:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#aa &lt;- append_method(existing_method = q,dataIn= datax,missPercentFrom = 10, missPercentTo = 80, interval = 10, MethodPath = &quot;source('~/imputeTestbench/R/inter.R')&quot;, MethodName = &quot;Random&quot;)</span>
+
+<span class="co">#aa</span>
+<span class="co">#plot_errors(aa)</span></code></pre></div>
+<p>This above code is written in commented format, since this function is dependent on other function and its location, which is not included in this package.</p>
+<p>If user wishes to add more than one imputation methods to test bench, the function <code>append_method()</code> is used as:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#bb &lt;- append_method(existing_method = aa, dataIn= datax,missPercentFrom = 10, missPercentTo = 80, interval = 10, MethodPath = &quot;source('~/imputeTestbench/R/PSFimpute.R')&quot;, MethodName = &quot;PSFimpute&quot;)</span>
+
+<span class="co">#bb</span>
+<span class="co">#plot_errors(bb)</span></code></pre></div>
+<p>where</p>
+<ul>
+<li><code>existing_method</code> is output obtained from <code>impute_error()</code> function</li>
+<li><code>dataIn</code> is imput time series for testing</li>
+<li><code>missPercentFrom</code> is variable from which percent of missing values to be considered</li>
+<li><code>missPercentTo</code> is variable to state upto what percent missing values are to be considered</li>
+<li><code>interval</code> is interval between consecutive missPercent values</li>
+<li><code>repetition</code> is an integer to decide the numbers of repetition to be done for each missPercent value</li>
+<li><code>errorParameter</code> is type of error calculation (RMSE, MAE or MAPE)</li>
+<li><code>MethodPath</code> is location of function for the proposed imputation method</li>
+<li><code>MethodName</code> is name for function for the proposed imputation method</li>
+</ul>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

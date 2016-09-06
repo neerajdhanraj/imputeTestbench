@@ -1,70 +1,64 @@
 #' Function to plot the Error Comparison
 #'
-#' @param  dataIn as input data in list format (returned by function inpute_errors())
-#' @param  \dots as additive functions for plot
-#' @param  plotType as parameter to decide Plot Type to achieve: 1: Barplot, 2: Line plot
-#' @return It returns the Error comparison for different methods
+#' @param dataIn an errprof object returned from \code{\link{inpute_errors}}
+#' @param plotType chr string indicating plot type
+#' @param \dots arguments passed to or from other methods
+#'
+#' @return a ggplot object that can be further modified
+#'
 #' @importFrom  reshape2 melt
 #' @importFrom graphics barplot
+#' @import ggplot2
+#'
 #' @export
+#'
 #' @examples
-#' # aa <- impute_errors()
-#' # bb <- plot_errors(aa)
-#' # bb
+#' aa <- impute_errors()
+#' plot_errors(aa)
 #'
-#' # cc <- impute_errors()
-#' # dd <- plot_errors(dataIn = cc, plotType = 1, main = "Bar plot",
-#' #         args.legend = list(x="topleft", bg = "NA"))
+#' cc <- impute_errors()
+#' plot_errors(dataIn = cc, plotType = 1, main = "Bar plot",
+#'          args.legend = list(x="topleft", bg = "NA"))
+#' plot_errors(dataIn = cc, plotType = 2)
+plot_errors <- function(dataIn, ...) UseMethod('plot_errors')
+
+#' @rdname plot_errors
 #'
-#' # cc <- impute_errors()
-#' # dd <- plot_errors(dataIn = cc, plotType = 2)
+#' @export
+#'
+#' @method plot_errors errprof
+plot_errors.errprof <- function(dataIn, plotType = c('boxplot'), ...){
 
-plot_errors <- function(dataIn, plotType, ...)
-{
-  if(!(hasArg(plotType)))
-  {
-    plotType <- 1
-  }
-  if(plotType == 2)
-  {
-    #melt <- NULL
-    Percent_of_Missing_Values <- NULL
-    Error_Values <- NULL
-    Methods <- NULL
+  if(!plotType %in% c('boxplot', 'bar'))
+    stop('plotType must be boxplot or bar')
 
-    qq1 <-  as.character(dataIn[[1]])
-    qq <- data.frame(dataIn[-1])
-    #qq1 <- dataIn$Parameter
+  if(plotType == 'boxplot'){
 
-    melted <- melt(qq, id.vars = "Missing_Percent")
-    colnames(melted) <- c("Percent_of_Missing_Values", "Methods", "Error_Values")
-    d <- ggplot(data=melted, aes(x=Percent_of_Missing_Values, y=Error_Values, group=Methods, color=Methods)) + labs(title = qq1) + geom_line()
+    toplo <- attr(dataIn, 'errall')
+    toplo <- melt(toplo)
+    percs <- dataIn$Missing_Percent
+    toplo$L2 <- factor(toplo$L2, levels = unique(toplo$L2), labels = percs)
+    names(toplo) <- c('Error value', '% of missing values', 'Methods')
+
+    p <- ggplot(toplo, aes(x = `% of missing values`, y = `Error value`)) +
+      ggtitle(dataIn$Parameter) +
+      geom_boxplot(aes(fill = Methods))
+
   }
 
-  if(plotType == 1)
-  {
-    q1 <-  as.character(dataIn[[1]])
-    q <- data.frame(dataIn)
-    q2 <- q[-1]
-    hd <- q2[1]
-    head <- as.numeric(unlist(hd))
-    q3 <- q2[-1]
-    meth <- names(q3)
-    q4 <- t(q3)
-    q5 <- data.frame(q4)
-    names(q5) <- head
+  if(plotType == 'bar'){
 
-    args <- list(...)
-    y <- as.matrix(q5)
-    if (length(args) == 0)
-    {
-      d <- barplot(y, main=q1, ylab="Error Value", xlab = "% of Missing Values", beside=TRUE,
-                   col= 1:nrow(q5), legend.text = meth, args.legend = list(x="topleft", bg = "NA"))
-    }
-    else
-    {
-      d <- barplot(as.matrix(q5), beside=TRUE, legend.text = meth, col= 1:nrow(q5),...)
-    }
+    toplo <- data.frame(dataIn[-1])
+    toplo <- melt(toplo, id.var = 'Missing_Percent')
+    toplo$Missing_Percent <- factor(toplo$Missing_Percent)
+    names(toplo) <- c('% of missing values', 'Methods', 'Error value')
+
+    p <- ggplot(toplo, aes(x = `% of missing values`, y = `Error value`)) +
+      ggtitle(dataIn$Parameter) +
+      geom_bar(aes(fill = Methods), stat = 'identity', position = 'dodge')
+
   }
-return(d)
+
+  return(p)
+
 }

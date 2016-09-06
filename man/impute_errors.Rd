@@ -40,16 +40,17 @@ Returns error comparison for imputation methods
 Function working as testbench for comparison of imputing models
 }
 \examples{
-# aa <- impute_errors()
-# aa
+aa <- impute_errors()
+aa
 
-# bb <- impute_errors(random = 0, startPoint = c(10, 20, 40), patchLength = c(3, 4, 5))
-# bb
+bb <- impute_errors(random = 0, startPoint = c(10, 20, 40), patchLength = c(3, 4, 5))
+bb
+\dontrun{
+cc <- impute_errors(univar = 0)
+cc
 
-# cc <- impute_errors(univar = 0)
-# cc
-
-# dd <- impute_errors(univar = 0, random = 0, startPint = c(1,10,30,0,3,50,70,90), patchLength = c(1,5,5,0,3,10,10,10))
-# dd
+dd <- impute_errors(univar = 0, random = 0, startPoint = c(1,10,30,0,3,50,70,90), patchLength = c(1,5,5,0,3,10,10,10))
+dd
+}
 }
 

@@ -21,17 +21,18 @@
 #' @return Returns error comparison for imputation methods
 #' @export
 #' @examples
-#' # aa <- impute_errors()
-#' # aa
+#' aa <- impute_errors()
+#' aa
 #'
-#' # bb <- impute_errors(random = 0, startPoint = c(10, 20, 40), patchLength = c(3, 4, 5))
-#' # bb
+#' bb <- impute_errors(random = 0, startPoint = c(10, 20, 40), patchLength = c(3, 4, 5))
+#' bb
+#'\dontrun{
+#' cc <- impute_errors(univar = 0)
+#' cc
 #'
-#' # cc <- impute_errors(univar = 0)
-#' # cc
-#'
-#' # dd <- impute_errors(univar = 0, random = 0, startPint = c(1,10,30,0,3,50,70,90), patchLength = c(1,5,5,0,3,10,10,10))
-#' # dd
+#' dd <- impute_errors(univar = 0, random = 0, startPoint = c(1,10,30,0,3,50,70,90), patchLength = c(1,5,5,0,3,10,10,10))
+#' dd
+#' }
 
 
 #==================================================================================
@@ -108,10 +109,13 @@ impute_errors <- function(dataIn, univar, missPercentFrom, missPercentTo, interv
     }
 
     e <- 0
+    eall <- NULL
     f <- 0
     e1 <- 0
+    e1all <- NULL
     f1 <- 0
     enew <- 0
+    enewall <- NULL
     fnew <- 0
 
 #=======================================
@@ -222,23 +226,47 @@ impute_errors <- function(dataIn, univar, missPercentFrom, missPercentTo, interv
         }
 
         e <- append(e,mean(gh))
+        eall <- c(eall, list(gh))
         f <- append(f,x)
         e1 <- append(e1,mean(gh1))
+        e1all <- c(e1all, list(gh1))
         f1 <- append(f1,x)
 
         if((hasArg(MethodPath)))
         {
           enew <- append(enew,mean(ghnew))
+          enewall <- c(enewall, list(ghnew))
           fnew <- append(fnew,x)
         }
       }
       if((hasArg(MethodPath)))
       {
 
-        return(list(Parameter = parameter, Missing_Percent = f[-1], Historic_Mean = e[-1], Interpolation = e1[-1], Proposed_Method = enew[-1]))
+        # output as list
+        out <- list(Parameter = parameter, Missing_Percent = f[-1], Historic_Mean = e[-1], Interpolation = e1[-1], Proposed_Method = enew[-1])
+
+        # create errprof object
+        out <- structure(
+          .Data = out,
+          class = c('errprof', 'list'),
+          errall = list(Historic_Mean = eall, Interpolation = e1all, Proposed_Method = enewall)
+        )
+        return(out)
+
       }
       else{
-        return(list(Parameter = parameter, Missing_Percent = f[-1], Historic_Mean = e[-1], Interpolation = e1[-1]))
+
+        # output as list
+        out <- list(Parameter = parameter, Missing_Percent = f[-1], Historic_Mean = e[-1], Interpolation = e1[-1])
+
+        # create errprof object
+        out <- structure(
+          .Data = out,
+          class = c('errprof', 'list'),
+          errall = list(Historic_Mean = eall, Interpolation = e1all)
+        )
+        return(out)
+
       }
 
     }
@@ -353,10 +381,33 @@ impute_errors <- function(dataIn, univar, missPercentFrom, missPercentTo, interv
       if((hasArg(MethodPath)))
       {
 
-        return(list(Parameter = parameter, Missing_Percent = f, Historic_Mean = as.numeric(na.omit(e)), Interpolation = as.numeric(na.omit(e1)), Proposed_Method = as.numeric(na.omit(enew))))
+        # output as list
+        out <- list(Parameter = parameter, Missing_Percent = f, Historic_Mean = as.numeric(na.omit(e)), Interpolation = as.numeric(na.omit(e1)), Proposed_Method = as.numeric(na.omit(enew)))
+
+        # create errprof object
+        out <- structure(
+          .Data = out,
+          class = c('errprof', 'list'),
+          errall = list(Historic_Mean = as.numeric(na.omit(e)), Interpolation = as.numeric(na.omit(e1)), Proposed_Method = as.numeric(na.omit(enew)))
+        )
+
+        return(out)
+
       }
       else{
-        return(list(Parameter = parameter, Missing_Percent = f, Historic_Mean = as.numeric(na.omit(e)), Interpolation = as.numeric(na.omit(e1))))
+
+        # output as list
+        out <- list(Parameter = parameter, Missing_Percent = f, Historic_Mean = as.numeric(na.omit(e)), Interpolation = as.numeric(na.omit(e1)))
+
+        # create errprof object
+        out <- structure(
+          .Data = out,
+          class = c('errprof', 'list'),
+          errall = list(Historic_Mean = as.numeric(na.omit(e)), Interpolation = as.numeric(na.omit(e1)))
+        )
+
+        return(out)
+
       }
     }
   }
@@ -384,7 +435,7 @@ impute_errors <- function(dataIn, univar, missPercentFrom, missPercentTo, interv
     }
     if(!(hasArg(repetition)))
     {
-      repetition <- 1
+      repetition <- 5
     }
     if(!(hasArg(MethodName)))
     {
@@ -416,10 +467,13 @@ impute_errors <- function(dataIn, univar, missPercentFrom, missPercentTo, interv
     }
 
     e <- 0
+    eall <- NULL
     f <- 0
     e1 <- 0
+    e1all <- NULL
     f1 <- 0
     enew <- 0
+    enewall <- NULL
     fnew <- 0
     eframe <- NULL
     eframe <- data.frame(1:repetition)
@@ -595,11 +649,13 @@ impute_errors <- function(dataIn, univar, missPercentFrom, missPercentTo, interv
       f <- f/100
       if((hasArg(MethodPath)))
       {
-        return(list(Parameter = parameter, Missing_Percent = f[-1], Historic_Mean = as.numeric(na.omit(e)), Interpolation = as.numeric(na.omit(e1)), Proposed_Method = as.numeric(na.omit(enew))))
+        out <- list(Parameter = parameter, Missing_Percent = f[-1], Historic_Mean = as.numeric(na.omit(e)), Interpolation = as.numeric(na.omit(e1)), Proposed_Method = as.numeric(na.omit(enew)))
+        return(out)
       }
       else
       {
-        return(list(Parameter = parameter, Missing_Percent = f[-1], Historic_Mean = as.numeric(na.omit(e)), Interpolation = as.numeric(na.omit(e1))))
+        out <- list(Parameter = parameter, Missing_Percent = f[-1], Historic_Mean = as.numeric(na.omit(e)), Interpolation = as.numeric(na.omit(e1)))
+        return(out)
       }
     }
 
@@ -742,10 +798,12 @@ impute_errors <- function(dataIn, univar, missPercentFrom, missPercentTo, interv
 
         if((hasArg(MethodPath)))
         {
-          return(list(Parameter = parameter, Missing_Percent = f, Historic_Mean = as.numeric(na.omit(e)), Interpolation = as.numeric(na.omit(e1)), Proposed_Method = as.numeric(na.omit(enew))))
+          out <- list(Parameter = parameter, Missing_Percent = f, Historic_Mean = as.numeric(na.omit(e)), Interpolation = as.numeric(na.omit(e1)), Proposed_Method = as.numeric(na.omit(enew)))
+          return(out)
         }
         else{
-          return(list(Parameter = parameter, Missing_Percent = f, Historic_Mean = as.numeric(na.omit(e)), Interpolation = as.numeric(na.omit(e1))))
+          out <- list(Parameter = parameter, Missing_Percent = f, Historic_Mean = as.numeric(na.omit(e)), Interpolation = as.numeric(na.omit(e1)))
+          return(out)
         }
       }
 

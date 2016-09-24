@@ -7,8 +7,7 @@
 \usage{
 plot_errors(dataIn, ...)
 
-\method{plot_errors}{errprof}(dataIn, plotType = c("boxplot", "bar", "line"),
-  ...)
+\method{plot_errors}{errprof}(dataIn, plotType = c("boxplot"), ...)
 }
 \arguments{
 \item{dataIn}{an errprof object returned from \code{\link{inpute_errors}}}

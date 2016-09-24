@@ -4,14 +4,11 @@
 \alias{impute_errors}
 \title{Function working as testbench for comparison of imputing models}
 \usage{
-impute_errors(dataIn, univar, missPercentFrom, missPercentTo, interval,
-  repetition, errorParameter, MethodPath, MethodName, random, startPoint,
-  patchLength)
+impute_errors(dataIn, missPercentFrom, missPercentTo, interval, repetition,
+  errorParameter, MethodPath, MethodName, random, startPoint, patchLength)
 }
 \arguments{
 \item{dataIn}{as input data for testing}
-
-\item{univar}{as to check whether input data is univariate.}
 
 \item{missPercentFrom}{as variable from which percent of missing values to be considered}
 
@@ -46,10 +43,10 @@ aa
 bb <- impute_errors(random = 0, startPoint = c(10, 20, 40), patchLength = c(3, 4, 5))
 bb
 \dontrun{
-cc <- impute_errors(univar = 0)
+cc <- impute_errors()
 cc
 
-dd <- impute_errors(univar = 0, random = 0, startPoint = c(1,10,30,0,3,50,70,90), patchLength = c(1,5,5,0,3,10,10,10))
+dd <- impute_errors(random = 0, startPoint = c(1,10,30,0,3,50,70,90), patchLength = c(1,5,5,0,3,10,10,10))
 dd
 }
 }

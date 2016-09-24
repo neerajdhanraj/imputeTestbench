@@ -4,31 +4,33 @@
 \alias{impute_errors}
 \title{Function working as testbench for comparison of imputing models}
 \usage{
-impute_errors(dataIn, missPercentFrom, missPercentTo, interval, repetition,
-  errorParameter, MethodPath, MethodName, random, startPoint, patchLength)
+impute_errors(dataIn = NULL, smps = "mcar", blck = 0.5, blckper = TRUE,
+  missPercentFrom = 10, missPercentTo = 90, interval = 10,
+  repetition = 10, errorParameter = "rmse", MethodPath = NULL,
+  MethodName = "Proposed Method")
 }
 \arguments{
-\item{dataIn}{as input data for testing}
+\item{dataIn}{input \code{\link[stats]{ts}} for testing, defaults to \code{\link[datasets]{nottem}}}
 
-\item{missPercentFrom}{as variable from which percent of missing values to be considered}
+\item{smps}{chr string indicating sampling type for generating missing data, see details}
 
-\item{missPercentTo}{as variable to state upto what percent missing values are to be considered}
+\item{blck}{numeric indicating block sizes as a proportion of the sample size for the missing data, applies only if \code{smps = 'mcar'}}
 
-\item{interval}{as interval between consecutive missPercent values}
+\item{blckper}{logical indicating if the value passed to \code{blck} is a proportion of the sample size for missing data, otherwise \code{blck} indicates number of observations}
 
-\item{repetition}{as an integer to decide the numbers of repetition to be done for each missPercent value}
+\item{missPercentFrom}{numeric from which percent of missing values to be considered}
 
-\item{errorParameter}{as type of error calculation (RMSE, MAE or MAPE)}
+\item{missPercentTo}{numeric for up to what percent missing values are to be considered}
 
-\item{MethodPath}{as location of function for the proposed imputation method}
+\item{interval}{numeric for interval between consecutive missPercent values}
 
-\item{MethodName}{as name for function for the proposed imputation method}
+\item{repetition}{numeric for repetitions to be done for each missPercent value}
 
-\item{random}{as parameter to decide missing value scheme}
+\item{errorParameter}{chr string indicating which error type to use, acceptable values are \code{"rmse"} (default), \code{"mae"}, \code{"mape"}, or \code{"other"}}
 
-\item{startPoint}{as index of missing patches in dataset when 'random = 0'}
+\item{MethodPath}{chr string of location of function for the proposed imputation method}
 
-\item{patchLength}{as length of missing patches in dataset when 'random = 0'}
+\item{MethodName}{chr string for name for function for the proposed imputation method}
 }
 \value{
 Returns error comparison for imputation methods
@@ -36,18 +38,14 @@ Returns error comparison for imputation methods
 \description{
 Function working as testbench for comparison of imputing models
 }
+\details{
+The \code{smps} argument indicates the type of sampling for generating missing data.  Options are \code{smps = 'mcar'} for missing completely at random and \code{smps = 'mar'} for missing at random.  Additional information about the sampling method is described in \code{\link{sample_dat}}.
+}
 \examples{
 aa <- impute_errors()
 aa
-
-bb <- impute_errors(random = 0, startPoint = c(10, 20, 40), patchLength = c(3, 4, 5))
-bb
-\dontrun{
-cc <- impute_errors()
-cc
-
-dd <- impute_errors(random = 0, startPoint = c(1,10,30,0,3,50,70,90), patchLength = c(1,5,5,0,3,10,10,10))
-dd
 }
+\seealso{
+\code{\link{sample_dat}}
 }
 

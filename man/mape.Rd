@@ -4,12 +4,12 @@
 \alias{mape}
 \title{Mean Absolute Percent Error Calculation}
 \usage{
-mape(diff, dataIn)
+mape(obs, pred)
 }
 \arguments{
-\item{diff}{is the difference between Original data and Predicted data}
+\item{obs}{numeric vector of original data}
 
-\item{dataIn}{as original input data}
+\item{pred}{numeric vector of predicted data}
 }
 \value{
 mapeVal as Mean Absolute Error

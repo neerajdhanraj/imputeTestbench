@@ -1,7 +1,8 @@
 #' Root Mean Square Error Calculation
 #'
 #' takes difference between Original data and Predicted data as input
-#' @param diff is the difference between Original data and Predicted data
+#' @param obs numeric vector of original data
+#' @param pred numeric vector of predicted data
 #' @return rmseVal as Root Mean Square Error
 #' @export
 #' @examples
@@ -12,9 +13,9 @@
 #' z
 ### RSME/MAE errors ============================================================================
 # Function that returns Root Mean Squared Error
-rmse <- function(diff)
+rmse <- function(obs, pred)
 {
-  rmseVal <- sqrt(mean(diff^2))
+  rmseVal <- sqrt(mean((obs - pred)^2))
   return(rmseVal)
 }
 
@@ -22,7 +23,8 @@ rmse <- function(diff)
 #' Mean Absolute Error Calculation
 #'
 #' takes difference between Original data and Predicted data as input
-#' @param diff is the difference between Original data and Predicted data
+#' @param obs numeric vector of original data
+#' @param pred numeric vector of predicted data
 #' @return maeVal as Mean Absolute Error
 #' @export
 #' @examples
@@ -32,9 +34,9 @@ rmse <- function(diff)
 #' z <- mae(x - y)
 #' z
 # Function that returns Mean Absolute Error
-mae <- function(diff)
+mae <- function(obs, pred)
 {
-  maeVal <- mean(abs(diff))
+  maeVal <- mean(abs(obs - pred))
   return(maeVal)
 }
 
@@ -42,8 +44,8 @@ mae <- function(diff)
 #' Mean Absolute Percent Error Calculation
 #'
 #' takes difference between Original data and Predicted data as input
-#' @param diff is the difference between Original data and Predicted data
-#' @param dataIn as original input data
+#' @param obs numeric vector of original data
+#' @param pred numeric vector of predicted data
 #' @return mapeVal as Mean Absolute Error
 #' @export
 #' @examples
@@ -53,9 +55,9 @@ mae <- function(diff)
 #' z <- mape((x - y),x)
 #' z
 # Function that returns Mean Absolute Error
-mape <- function(diff, dataIn)
+mape <- function(obs, pred)
 {
-  mapeVal <- mean(abs(diff)* 100/dataIn)
+  mapeVal <- mean(abs(obs - pred)* 100/obs)
   return(mapeVal)
 }
 

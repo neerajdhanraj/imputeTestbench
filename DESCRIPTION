@@ -13,7 +13,8 @@ Imports:
     reshape2,
     methods,
     stats,
-    dplyr
+    dplyr,
+    zoo
 BugReports:	https://github.com/neerajdhanraj/imputeTestbench/issues
 URL: http://www.neerajbokde.com/cran/imputetestbench
 License: GPL

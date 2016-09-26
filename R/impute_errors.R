@@ -9,6 +9,8 @@
 #' @param blckper logical indicating if the value passed to \code{blck} is a proportion of the sample size for missing data, otherwise \code{blck} indicates number of observations
 #' @param repetition numeric for repetitions to be done for each missPercent value
 #' @param errorParameter chr string indicating which error type to use, acceptable values are \code{"rmse"} (default), \code{"mae"}, \code{"mape"}, or \code{"other"}
+#' @param errorPath chr string of location of error function for evaluating imputations, applies only if \code{errorParameter = "other"}
+#' @param errorName chr string for name of error function for evaluating imputations, applies only if \code{errorParameter = "other"}
 #' @param MethodPath chr string of location of function for the proposed imputation method
 #' @param MethodName chr string for name for function for the proposed imputation method
 #'
@@ -32,7 +34,7 @@
 # impute_error starts here....
 #==================================================================================
 
-impute_errors <- function(dataIn = NULL, smps = 'mcar', blck = 0.5, blckper = TRUE, missPercentFrom = 10, missPercentTo = 90, interval = 10, repetition = 10, errorParameter = 'rmse', MethodPath = NULL, MethodName = 'Proposed Method')
+impute_errors <- function(dataIn = NULL, smps = 'mcar', methods = c("na.mean", "na.interpolation"), args = list(na.approx = list(na.rm = FALSE), na.spline = list(na.rm = FALSE)), blck = 0.5, blckper = TRUE, missPercentFrom = 10, missPercentTo = 90, interval = 10, repetition = 10, errorParameter = 'rmse', errorPath = NULL, errorName = NULL, MethodPath = NULL, MethodName = 'Proposed Method', ...)
 {
 
   # Sample Dataset 'nottem' is provided for testing in default case.
@@ -42,141 +44,69 @@ impute_errors <- function(dataIn = NULL, smps = 'mcar', blck = 0.5, blckper = TR
   dataIn <- as.numeric(unlist(dataIn))
 
   # check if errorParameter is okay
-  if(!errorParameter[1] %in% c('rmse', 'mae', 'mape', 'other'))
+  if(!errorParameter %in% c('rmse', 'mae', 'mape', 'other'))
     stop('errorParameter must be one of rmse, mae, mape, other')
 
-  # placeholders for error estimates for each method
-  f <- 0
-  e <- 0
-  eall <- NULL
-  e1 <- 0
-  e1all <- NULL
-  enew <- 0
-  enewall <- NULL
+  # missing percentages to evaluate
+  percs <- seq(missPercentFrom, missPercentTo, interval)
 
-  # create missing data for each missing percentage
-  # take error estimates for each repetition
-  for(x in seq(missPercentFrom, missPercentTo, interval)){
+  # create master list for output
+  errall <- vector('list', length = length(percs))
+  errall <- rep(list(errall), length(methods))
+  names(errall) <- methods
 
-    # create the missing data for imputation
-    out <- sample_dat(dataIn, smps = smps, b = x/100, blck = blck, blckper = blckper, plot = FALSE)
+  # get other error
+  if(errorParameter == 'other'){
 
-    gh <- NULL
-    gh1 <- NULL
-    ghnew <- NULL
-    for(i in 1:repetition)
-    {
-      outs <- as.numeric(unlist(out[i]))
+    source(errorPath)
 
-      #d <- impute(outs,mean)
-      out1 <- ts(outs)
-      d <- na.mean(out1)
-      d1 <- na.interpolation(out1)
+    if(is.null(errorName))
+      stop('name of error function not provided in errorName')
 
-      if((hasArg(MethodPath)))
-      {
-        # to call functions from provided "MethodPath"
-        dnew <- parse(text = MethodPath)
-        dnew <- eval(dnew)
-        dnew <- dnew$value(outs)
+    errorParameter <- errorName
 
-        if(errorParameter == 'rmse')
-        {
-          ghnew[i] <- rmse(dataIn - dnew)
-          parameter <- "RMSE Plot"
-        }
-        if(errorParameter == 'mae')
-        {
-          ghnew[i] <- mae(dataIn - dnew)
-          parameter <- "MAE Plot"
-        }
-        if(errorParameter == 'mape')
-        {
-          ghnew[i] <- mape((dataIn - dnew), dataIn)
-          parameter <- "MAPE Plot"
-        }
-        if(errorParameter[1] == 'other')
-        {
-          newPar <- parse(text = errorParameter[2])
-          newPar <- eval(newPar)
-          newPar <- newPar$value(dataIn, dnew)
-          ghnew[i] <- newPar
-          parameter <- errorParameter[3]
-        }
-      }
+  }
 
-      if(errorParameter == 'rmse')
-      {
-        gh[i] <- rmse(dataIn - d)
-        gh1[i] <- rmse(dataIn - d1)
-        parameter <- "RMSE Plot"
-      }
-      if(errorParameter == 'mae')
-      {
-        gh[i] <- mae(dataIn - d)
-        gh1[i] <- mae(dataIn - d1)
-        parameter <- "MAE Plot"
-      }
-      if(errorParameter == 'mape')
-      {
-        gh[i] <- mape((dataIn - d), dataIn)
-        gh1[i] <- mape((dataIn - d1), dataIn)
-        parameter <- "MAPE Plot"
-      }
-      if(errorParameter[1] == 4)
-      {
-        newPar <- parse(text = errorParameter[2])
-        newPar <- eval(newPar)
-        newPar1 <- newPar$value(dataIn, d)
-        gh[i] <- newPar1
-        newPar2 <- newPar$value(dataIn, d1)
-        gh1[i] <- newPar2
-        parameter <- errorParameter[3]
-      }
-    }
+  # go through each imputation method
+  for(method in methods){
 
-    e <- append(e, mean(gh))
-    eall <- c(eall, list(gh))
-    f <- append(f, x)
-    e1 <- append(e1, mean(gh1))
-    e1all <- c(e1all, list(gh1))
+    # create missing data for each missing percentage
+    # take error estimates for each repetition
+    for(x in seq_along(percs)){
 
-    if((hasArg(MethodPath)))
-    {
-      enew <- append(enew, mean(ghnew))
-      enewall <- c(enewall, list(ghnew))
+      # create the missing data for imputation
+      b <- percs[x]/100
+      out <- sample_dat(dataIn, smps = smps, b = b, repetition = repetition,
+        blck = blck, blckper = blckper, plot = FALSE)
+
+      # iterate through each repetition, get predictions, get error
+      errs <- lapply(out, function(x){
+
+        toeval <- paste0(method, '(x, ...)')
+        filled <- eval(parse(text = toeval))
+        errout <- paste0(errorParameter, '(dataIn, filled)')
+        eval(parse(text = errout))
+
+      })
+
+      # append to master list
+      errall[[method]][[x]] <- unlist(errs)
+
     }
 
   }
 
   ##
-  # output
+  # summarize for output
+  out <- lapply(errall, function(x) unlist(lapply(x, mean)))
+  out <- c(list(Parameter = errorParameter, Missing_Percent = percs), out)
 
-  if((hasArg(MethodPath))){
-
-    # output as list
-    out <- list(Parameter = parameter, Missing_Percent = f[-1], Historic_Mean = e[-1], Interpolation = e1[-1], Proposed_Method = enew[-1])
-
-    # create errprof object
-    out <- structure(
-      .Data = out,
-      class = c('errprof', 'list'),
-      errall = list(Historic_Mean = eall, Interpolation = e1all, Proposed_Method = enewall)
-    )
-
-  } else {
-
-    # output as list
-    out <- list(Parameter = parameter, Missing_Percent = f[-1], Historic_Mean = e[-1], Interpolation = e1[-1])
-
-    # create errprof object
-    out <- structure(
-      .Data = out,
-      class = c('errprof', 'list'),
-      errall = list(Historic_Mean = eall, Interpolation = e1all)
-    )
-
-  }
+  # create errprof object
+  out <- structure(
+    .Data = out,
+    class = c('errprof', 'list'),
+    errall = errall
+  )
 
   return(out)
 

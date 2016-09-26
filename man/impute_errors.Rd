@@ -4,10 +4,13 @@
 \alias{impute_errors}
 \title{Function working as testbench for comparison of imputing models}
 \usage{
-impute_errors(dataIn = NULL, smps = "mcar", blck = 0.5, blckper = TRUE,
+impute_errors(dataIn = NULL, smps = "mcar", methods = c("na.mean",
+  "na.interpolation"), args = list(na.approx = list(na.rm = FALSE), na.spline
+  = list(na.rm = FALSE)), blck = 0.5, blckper = TRUE,
   missPercentFrom = 10, missPercentTo = 90, interval = 10,
-  repetition = 10, errorParameter = "rmse", MethodPath = NULL,
-  MethodName = "Proposed Method")
+  repetition = 10, errorParameter = "rmse", errorPath = NULL,
+  errorName = NULL, MethodPath = NULL, MethodName = "Proposed Method",
+  ...)
 }
 \arguments{
 \item{dataIn}{input \code{\link[stats]{ts}} for testing, defaults to \code{\link[datasets]{nottem}}}
@@ -27,6 +30,10 @@ impute_errors(dataIn = NULL, smps = "mcar", blck = 0.5, blckper = TRUE,
 \item{repetition}{numeric for repetitions to be done for each missPercent value}
 
 \item{errorParameter}{chr string indicating which error type to use, acceptable values are \code{"rmse"} (default), \code{"mae"}, \code{"mape"}, or \code{"other"}}
+
+\item{errorPath}{chr string of location of error function for evaluating imputations, applies only if \code{errorParameter = "other"}}
+
+\item{errorName}{chr string for name of error function for evaluating imputations, applies only if \code{errorParameter = "other"}}
 
 \item{MethodPath}{chr string of location of function for the proposed imputation method}
 

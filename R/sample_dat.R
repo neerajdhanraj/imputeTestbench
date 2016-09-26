@@ -52,12 +52,6 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 0.5, blck = 0.
   # sampling at random
   if(smps == 'mar'){
 
-    # sanity checks
-    if(blck < 1 & !blckper)
-      stop('block must be at least one if blckper = F')
-    if(blck > 1 & blckper)
-      stop('block must be less than or equal to 1 if blckper = T')
-
     # block size
     if(blckper){
 

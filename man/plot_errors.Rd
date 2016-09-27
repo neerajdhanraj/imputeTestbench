@@ -2,33 +2,33 @@
 % Please edit documentation in R/plot_errors.R
 \name{plot_errors}
 \alias{plot_errors}
+\alias{plot_errors.errprof}
 \title{Function to plot the Error Comparison}
 \usage{
-plot_errors(dataIn, plotType, ...)
+plot_errors(dataIn, ...)
+
+\method{plot_errors}{errprof}(dataIn, plotType = c("boxplot"), ...)
 }
 \arguments{
-\item{dataIn}{as input data in list format (returned by function inpute_errors())}
+\item{dataIn}{an errprof object returned from \code{\link{inpute_errors}}}
 
-\item{plotType}{as parameter to decide Plot Type to achieve: 1: Barplot, 2: Line plot}
+\item{plotType}{chr string indicating plot type}
 
-\item{\dots}{as additive functions for plot}
+\item{\dots}{arguments passed to or from other methods}
 }
 \value{
-It returns the Error comparison for different methods
+a ggplot object that can be further modified
 }
 \description{
 Function to plot the Error Comparison
 }
 \examples{
-# aa <- impute_errors()
-# bb <- plot_errors(aa)
-# bb
+aa <- impute_errors()
+plot_errors(aa)
 
-# cc <- impute_errors()
-# dd <- plot_errors(dataIn = cc, plotType = 1, main = "Bar plot",
-#         args.legend = list(x="topleft", bg = "NA"))
-
-# cc <- impute_errors()
-# dd <- plot_errors(dataIn = cc, plotType = 2)
+cc <- impute_errors()
+plot_errors(dataIn = cc, plotType = 1, main = "Bar plot",
+         args.legend = list(x="topleft", bg = "NA"))
+plot_errors(dataIn = cc, plotType = 2)
 }
 

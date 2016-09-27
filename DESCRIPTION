@@ -2,19 +2,35 @@ Package: imputeTestbench
 Type: Package
 Title: Test Bench for Missing Data Imputing Models/Methods Comparison
 Version: 2.1.2
-Author: Neeraj Bokde
-Maintainer: Neeraj Bokde <neerajdhanraj@gmail.com>
 Description: Provides a Test bench for comparison of missing
     data imputation models/methods. It compares imputing methods with reference
     to RMSE, MAE or MAPE parameters. It allows to add new proposed methods to test
     bench and to compare with other methods. The function 'append_method()' allows
     to add multiple numbers of methods to the existing methods available in test bench.
-Imports: ggplot2, imputeTS, reshape2, methods, stats, mi, mice
+Imports:
+    ggplot2,
+    imputeTS,
+    reshape2,
+    methods,
+    stats,
+    dplyr
 BugReports:	https://github.com/neerajdhanraj/imputeTestbench/issues
 URL: http://www.neerajbokde.com/cran/imputetestbench
 License: GPL
+Authors@R: c(
+	person(given = "Neeraj", family = "Bokde",
+    role = c("cre"),
+    email = "neerajdhanraj@gmail.com"
+    ),
+	person(given = "Marcus W.", family = "Beck",
+    role = c("aut"),
+    email = "mbafs2012@gmail.com"
+    )
+  )
 LazyData: TRUE
 RoxygenNote: 5.0.1
-Suggests: knitr,
-    rmarkdown
+Suggests:
+    knitr,
+    rmarkdown,
+    magrittr
 VignetteBuilder: knitr

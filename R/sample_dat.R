@@ -24,7 +24,7 @@
 #' sample_dat(a, smps = 'mar')
 #' sample_dat(a, plot = T)
 #' sample_dat(a, smps = 'mar', plot = T)
-sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 0.5, blck = 0.5, blckper = TRUE, plot = FALSE){
+sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50, blckper = TRUE, plot = FALSE){
 
   # sanity checks
   if(!smps %in% c('mcar', 'mar'))
@@ -32,7 +32,7 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 0.5, blck = 0.
 
   # sample to take for missing data given x
   pool <- 1:length(datin)
-  torm <- round(length(pool) * b)
+  torm <- round(length(pool) * b/100)
   out <- vector('list', length = repetition)
 
   # sampling complately at random
@@ -55,10 +55,10 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 0.5, blck = 0.
     # block size
     if(blckper){
 
-      if(blck > 1)
-        stop('block must be less than or equal to 1 if blckper = T')
+      if(blck > 100 | blck < 0)
+        stop('block must be between 0 - 100 if blckper = T')
 
-      blck <- pmax(1, round(torm * blck))
+      blck <- pmax(1, round(torm * blck/100))
 
     } else {
 

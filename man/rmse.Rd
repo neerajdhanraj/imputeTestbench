@@ -4,10 +4,12 @@
 \alias{rmse}
 \title{Root Mean Square Error Calculation}
 \usage{
-rmse(diff)
+rmse(obs, pred)
 }
 \arguments{
-\item{diff}{is the difference between Original data and Predicted data}
+\item{obs}{numeric vector of original data}
+
+\item{pred}{numeric vector of predicted data}
 }
 \value{
 rmseVal as Root Mean Square Error

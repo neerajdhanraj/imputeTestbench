@@ -4,10 +4,12 @@
 \alias{mae}
 \title{Mean Absolute Error Calculation}
 \usage{
-mae(diff)
+mae(obs, pred)
 }
 \arguments{
-\item{diff}{is the difference between Original data and Predicted data}
+\item{obs}{numeric vector of original data}
+
+\item{pred}{numeric vector of predicted data}
 }
 \value{
 maeVal as Mean Absolute Error

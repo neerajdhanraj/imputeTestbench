@@ -4,19 +4,27 @@
 \alias{impute_errors}
 \title{Function working as testbench for comparison of imputing models}
 \usage{
-impute_errors(dataIn = NULL, smps = "mcar", blck = 0.5, blckper = TRUE,
-  missPercentFrom = 10, missPercentTo = 90, interval = 10,
-  repetition = 10, errorParameter = "rmse", MethodPath = NULL,
-  MethodName = "Proposed Method")
+impute_errors(dataIn = NULL, smps = "mcar", methods = c("na.mean",
+  "na.interpolation"), methodPath = NULL, errorParameter = "rmse",
+  errorPath = NULL, blck = 50, blckper = TRUE, missPercentFrom = 10,
+  missPercentTo = 90, interval = 10, repetition = 10, ...)
 }
 \arguments{
 \item{dataIn}{input \code{\link[stats]{ts}} for testing, defaults to \code{\link[datasets]{nottem}}}
 
 \item{smps}{chr string indicating sampling type for generating missing data, see details}
 
-\item{blck}{numeric indicating block sizes as a proportion of the sample size for the missing data, applies only if \code{smps = 'mcar'}}
+\item{methods}{chr string of imputation methods to use, one to many.  A user-supplied function can be included if \code{MethodPath} is used, see details.}
 
-\item{blckper}{logical indicating if the value passed to \code{blck} is a proportion of the sample size for missing data, otherwise \code{blck} indicates number of observations}
+\item{methodPath}{chr string of location of function for the proposed imputation method}
+
+\item{errorParameter}{chr string indicating which error type to use, acceptable values are \code{"rmse"} (default), \code{"mae"}, or \code{"mape"}.  Alternatively, a user-supplied function can be passed if \code{errorPath} is used, see details.}
+
+\item{errorPath}{chr string of location of error function for evaluating imputations}
+
+\item{blck}{numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mcar'}}
+
+\item{blckper}{logical indicating if the value passed to \code{blck} is a percentage of the sample size for missing data, otherwise \code{blck} indicates number of observations}
 
 \item{missPercentFrom}{numeric from which percent of missing values to be considered}
 
@@ -26,11 +34,7 @@ impute_errors(dataIn = NULL, smps = "mcar", blck = 0.5, blckper = TRUE,
 
 \item{repetition}{numeric for repetitions to be done for each missPercent value}
 
-\item{errorParameter}{chr string indicating which error type to use, acceptable values are \code{"rmse"} (default), \code{"mae"}, \code{"mape"}, or \code{"other"}}
-
-\item{MethodPath}{chr string of location of function for the proposed imputation method}
-
-\item{MethodName}{chr string for name for function for the proposed imputation method}
+\item{...}{arguments passed to other imputation methods}
 }
 \value{
 Returns error comparison for imputation methods
@@ -40,10 +44,16 @@ Function working as testbench for comparison of imputing models
 }
 \details{
 The \code{smps} argument indicates the type of sampling for generating missing data.  Options are \code{smps = 'mcar'} for missing completely at random and \code{smps = 'mar'} for missing at random.  Additional information about the sampling method is described in \code{\link{sample_dat}}.
+
+A user-supplied funcion can be passed to \code{methods} as an additional imputation method.  A character string indicating the path of the function must also be supplied to \code{methodPath}.  The path must point to a function where the first argument is the time series to impute.  Additional arguments for the function are passed as a list to the \code{...} argument, where the list contains the same number of elements equal in length to the \code{methods} argument, i.e., a list of lists where each element is a smaller list passed to each function in \code{methods}. See the examples.
+
+Similarly, an alternative error function can be passed to \code{errorParameter} if \code{errorPath} is not \code{NULL}.  The function specified in \code{errorPath} must have two arguments where the first is a vector for the observed time series and the second is a vector for the predicted time series.
 }
 \examples{
 aa <- impute_errors()
 aa
+
+# passing additional imputation methods
 }
 \seealso{
 \code{\link{sample_dat}}

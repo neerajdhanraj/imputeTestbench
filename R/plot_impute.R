@@ -10,11 +10,12 @@
 #' @param blckper logical indicating if the value passed to \code{blck} is a percentage of the sample size for missing data, otherwise \code{blck} indicates number of observations
 #' @param missPercent numeric for percent of missing values to be considered
 #' @param showmiss logical if actual missing values are plotted
-#' @param ... arguments passed to other imputation methods
+#' @param addl_arg arguments passed to other imputation methods as a list of lists, see details.
 #'
-#' @return A \code{\link[ggplot2]{ggplot}} object showing the imputed data for each method.
+#' @return A \code{\link[ggplot2]{ggplot}} object showing the imputed data for each method.  Imputed data are colored as 'filled'.  Actual missing data can be added to the plot if \code{showmiss = TRUE}.
 #'
 #' @import ggplot2
+#' @import zoo
 #'
 #' @details See the documentation for \code{\link{impute_errors}} for an explanation of the arguments.
 #'
@@ -22,13 +23,15 @@
 #'
 #' @examples
 #' plot_impute()
-plot_impute <- function(dataIn = NULL, smps = 'mcar', methods = c("na.mean", "na.interpolation"),  methodPath = NULL, blck = 50, blckper = TRUE, missPercent = 10, showmiss = FALSE, ...){
+plot_impute <- function(dataIn = NULL, smps = 'mcar', methods = c("na.approx", "na.interp", "na.interpolation", "na.locf", "na.mean"),  methodPath = NULL, blck = 50, blckper = TRUE, missPercent = 50, showmiss = FALSE, addl_arg = NULL){
 
   # Sample Dataset 'nottem' is provided for testing in default case.
   if(is.null(dataIn))
     dataIn <- nottem
 
-  dataIn <- as.numeric(unlist(dataIn))
+  # source method if provided
+  if(!is.null(methodPath))
+    source(methodPath)
 
   # check if methods are okay
   meth_chk <- sapply(methods, function(x) exists(x), simplify = FALSE)
@@ -42,6 +45,12 @@ plot_impute <- function(dataIn = NULL, smps = 'mcar', methods = c("na.mean", "na
   imps <- vector('list', length = length(methods))
   names(imps) <- methods
 
+  # fill arguments with list
+  args <- rep(list(list()), length = length(methods))
+  names(args) <- methods
+  if(!is.null(addl_arg))
+    args[names(addl_arg)] <- addl_arg
+
   # create the missing data for imputation
   b <- missPercent
   out <- sample_dat(dataIn, smps = smps, b = b, repetition = 1,
@@ -50,8 +59,12 @@ plot_impute <- function(dataIn = NULL, smps = 'mcar', methods = c("na.mean", "na
   # go through each imputation method
   for(method in methods){
 
+    # arguments and method to eval
+    arg <- list(args[[method]])
+    toeval <- paste0('do.call(', method, ', args = c(list(out[[1]]),', arg, '))')
+    toeval <- gsub(',)', ')', toeval)
+
     # get predictions
-    toeval <- paste0(method, '(out[[1]], ...)')
     filled <- eval(parse(text = toeval))
 
     # append to master list
@@ -67,10 +80,10 @@ plot_impute <- function(dataIn = NULL, smps = 'mcar', methods = c("na.mean", "na
   toplo$Filled <- factor(toplo$Filled)
   toplo$Actual <- dataIn
   toplo$ind <- 1:nrow(toplo)
-  toplo <- tidyr::gather(toplo, 'Method', 'Estimate', -ind, -Filled, -Actual)
+  toplo <- tidyr::gather(toplo, 'Method', 'Value', -ind, -Filled, -Actual)
 
   # plot
-  p <- ggplot(toplo, aes(x = ind, y = Estimate)) +
+  p <- ggplot(toplo, aes(x = ind, y = Value)) +
     geom_point(aes(colour = Filled)) +
     facet_wrap(~Method, ncol = 1) +
     theme_bw() +

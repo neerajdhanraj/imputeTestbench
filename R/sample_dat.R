@@ -22,8 +22,8 @@
 #' a <- rnorm(1000)
 #' sample_dat(a)
 #' sample_dat(a, smps = 'mar')
-#' sample_dat(a, plot = T)
-#' sample_dat(a, smps = 'mar', plot = T)
+#' sample_dat(a, plot = TRUE)
+#' sample_dat(a, smps = 'mar', plot = TRUE)
 sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50, blckper = TRUE, plot = FALSE){
 
   # sanity checks

@@ -12,17 +12,21 @@
 #' @param missPercentTo numeric for up to what percent missing values are to be considered
 #' @param interval numeric for interval between consecutive missPercent values
 #' @param repetition numeric for repetitions to be done for each missPercent value
-#' @param ... arguments passed to other imputation methods
+#' @param addl_arg arguments passed to other imputation methods as a list of lists, see details.
 #'
-#' @details The \code{smps} argument indicates the type of sampling for generating missing data.  Options are \code{smps = 'mcar'} for missing completely at random and \code{smps = 'mar'} for missing at random.  Additional information about the sampling method is described in \code{\link{sample_dat}}.
+#' @details
+#' The default methods for \code{impute_errors} are \code{\link[zoo]{na.approx}}, \code{\link[forecast]{na.interp}}, \code{\link[imputeTS]{na.interpolation}}, \code{\link[zoo]{na.locf}},  and \code{\link[imputeTS]{na.mean}}.  See the help file for each for additional documentation. Additional arguments for the imputation functions are passed as a list of lists to the \code{addl_arg} argument, where the list contains one to many elements that are named by the \code{methods}. The elements of the master list are lists with arguments for the relevant methods. See the examples.
 #'
-#' A user-supplied funcion can be passed to \code{methods} as an additional imputation method.  A character string indicating the path of the function must also be supplied to \code{methodPath}.  The path must point to a function where the first argument is the time series to impute.  Additional arguments for the function are passed as a list to the \code{...} argument, where the list contains the same number of elements equal in length to the \code{methods} argument, i.e., a list of lists where each element is a smaller list passed to each function in \code{methods}. See the examples.
+#' A user-supplied function can also be passed to \code{methods} as an additional imputation method.  A character string indicating the path of the function must also be supplied to \code{methodPath}.  The path must point to a function where the first argument is the time series to impute.
 #'
-#' Similarly, an alternative error function can be passed to \code{errorParameter} if \code{errorPath} is not \code{NULL}.  The function specified in \code{errorPath} must have two arguments where the first is a vector for the observed time series and the second is a vector for the predicted time series.
+#' An alternative error function can also be passed to \code{errorParameter} if \code{errorPath} is not \code{NULL}.  The function specified in \code{errorPath} must have two arguments where the first is a vector for the observed time series and the second is a vector for the predicted time series.
 #'
-#' @import imputeTS
+#' The \code{smps} argument indicates the type of sampling for generating missing data.  Options are \code{smps = 'mcar'} for missing completely at random and \code{smps = 'mar'} for missing at random.  Additional information about the sampling method is described in \code{\link{sample_dat}}. The relevant arguments for \code{smps = 'mar'} are \code{blck} and \code{blckper} which greatly affect the sampling method.
+#'
+#' @import forecast
+#' @importFrom imputeTS na.interpolation na.mean
 #' @importFrom stats ts
-#' @importFrom methods hasArg
+#' @import zoo
 #'
 #' @seealso \code{\link{sample_dat}}
 #'
@@ -33,16 +37,24 @@
 #' @examples
 #' aa <- impute_errors()
 #' aa
+#' plot_errors(aa)
 #'
-#' # passing additional imputation methods
-impute_errors <- function(dataIn = NULL, smps = 'mcar', methods = c("na.mean", "na.interpolation"),  methodPath = NULL, errorParameter = 'rmse', errorPath = NULL, blck = 50, blckper = TRUE, missPercentFrom = 10, missPercentTo = 90, interval = 10, repetition = 10, ...)
+#' # passing addtional arguments to imputation methods
+#' impute_errors(addl_arg = list(na.mean = list(option = 'mode')))
+impute_errors <- function(dataIn = NULL, smps = 'mcar', methods = c("na.approx", "na.interp", "na.interpolation", "na.locf", "na.mean"),  methodPath = NULL, errorParameter = 'rmse', errorPath = NULL, blck = 50, blckper = TRUE, missPercentFrom = 10, missPercentTo = 90, interval = 10, repetition = 10, addl_arg = NULL)
 {
 
   # Sample Dataset 'nottem' is provided for testing in default case.
   if(is.null(dataIn))
     dataIn <- nottem
 
-  dataIn <- as.numeric(unlist(dataIn))
+  # source method if provided
+  if(!is.null(methodPath))
+    source(methodPath)
+
+  # source error if provided
+  if(!is.null(errorPath))
+    source(errorPath)
 
   # check if methods are okay
   meth_chk <- sapply(methods, function(x) exists(x), simplify = FALSE)
@@ -64,6 +76,12 @@ impute_errors <- function(dataIn = NULL, smps = 'mcar', methods = c("na.mean", "
   errall <- rep(list(errall), length(methods))
   names(errall) <- methods
 
+  # fill arguments with list
+  args <- rep(list(list()), length = length(methods))
+  names(args) <- methods
+  if(!is.null(addl_arg))
+    args[names(addl_arg)] <- addl_arg
+
   # create missing data for each missing percentage
   # take error estimates for each repetition
   for(x in seq_along(percs)){
@@ -76,15 +94,17 @@ impute_errors <- function(dataIn = NULL, smps = 'mcar', methods = c("na.mean", "
     # go through each imputation method
     for(method in methods){
 
-      # iterate through each repetition, get predictions, get error
-      errs <- lapply(out, function(x){
+      # arguments and method to eval
+      arg <- list(args[[method]])
+      toeval <- paste0('do.call(', method, ', args = c(list(y),', arg, '))')
+      toeval <- gsub(',)', ')', toeval)
 
-        toeval <- paste0(method, '(x, ...)')
+      # iterate through each repetition, get predictions, get error
+      errs <- lapply(out, function(y){
         filled <- eval(parse(text = toeval))
         errout <- paste0(errorParameter, '(dataIn, filled)')
         eval(parse(text = errout))
-
-      })
+        })
 
       # append to master list
       errall[[method]][[x]] <- unlist(errs)

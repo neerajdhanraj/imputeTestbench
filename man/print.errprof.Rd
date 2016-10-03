@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{x}{input errprof object}
+
+\item{...}{arguments passed to or from other methods}
 }
 \value{
 list output for the errprof object

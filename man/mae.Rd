@@ -21,7 +21,7 @@ takes difference between Original data and Predicted data as input
 ## Generate 100 random numbers within some limits
 x <- sample(1:7, 100, replace = TRUE)
 y <- sample(1:4, 100, replace = TRUE)
-z <- mae(x - y)
+z <- mae(x, y)
 z
 }
 

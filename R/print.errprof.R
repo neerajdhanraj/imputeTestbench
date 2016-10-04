@@ -3,6 +3,7 @@
 #' Print method for errprof class
 #'
 #' @param x input errprof object
+#' @param ... arguments passed to or from other methods
 #'
 #' @return list output for the errprof object
 #'

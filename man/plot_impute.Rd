@@ -4,9 +4,10 @@
 \alias{plot_impute}
 \title{Plot imputations}
 \usage{
-plot_impute(dataIn = NULL, smps = "mcar", methods = c("na.mean",
-  "na.interpolation"), methodPath = NULL, blck = 50, blckper = TRUE,
-  missPercent = 10, showmiss = FALSE, ...)
+plot_impute(dataIn = NULL, smps = "mcar", methods = c("na.approx",
+  "na.interp", "na.interpolation", "na.locf", "na.mean"), methodPath = NULL,
+  blck = 50, blckper = TRUE, missPercent = 50, showmiss = FALSE,
+  addl_arg = NULL)
 }
 \arguments{
 \item{dataIn}{input \code{\link[stats]{ts}} for testing, defaults to \code{\link[datasets]{nottem}}}
@@ -25,10 +26,10 @@ plot_impute(dataIn = NULL, smps = "mcar", methods = c("na.mean",
 
 \item{showmiss}{logical if actual missing values are plotted}
 
-\item{...}{arguments passed to other imputation methods}
+\item{addl_arg}{arguments passed to other imputation methods as a list of lists, see details.}
 }
 \value{
-A \code{\link[ggplot2]{ggplot}} object showing the imputed data for each method.
+A \code{\link[ggplot2]{ggplot}} object showing the imputed data for each method.  Imputed data are colored as 'filled'.  Actual missing data can be added to the plot if \code{showmiss = TRUE}.
 }
 \description{
 Plot imputations for data from multiple methods

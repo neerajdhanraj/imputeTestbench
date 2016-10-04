@@ -9,13 +9,13 @@
 #' ## Generate 100 random numbers within some limits
 #' x <- sample(1:7, 100, replace = TRUE)
 #' y <- sample(1:4, 100, replace = TRUE)
-#' z <- rmse(x - y)
+#' z <- rmse(x, y)
 #' z
 ### RSME/MAE errors ============================================================================
 # Function that returns Root Mean Squared Error
 rmse <- function(obs, pred)
 {
-  rmseVal <- sqrt(mean((obs - pred)^2))
+  rmseVal <- sqrt(mean((obs - pred)^2, na.rm = T))
   return(rmseVal)
 }
 
@@ -31,12 +31,12 @@ rmse <- function(obs, pred)
 #' ## Generate 100 random numbers within some limits
 #' x <- sample(1:7, 100, replace = TRUE)
 #' y <- sample(1:4, 100, replace = TRUE)
-#' z <- mae(x - y)
+#' z <- mae(x, y)
 #' z
 # Function that returns Mean Absolute Error
 mae <- function(obs, pred)
 {
-  maeVal <- mean(abs(obs - pred))
+  maeVal <- mean(abs(obs - pred), na.rm = TRUE)
   return(maeVal)
 }
 
@@ -52,12 +52,12 @@ mae <- function(obs, pred)
 #' ## Generate 100 random numbers within some limits
 #' x <- sample(1:7, 100, replace = TRUE)
 #' y <- sample(1:4, 100, replace = TRUE)
-#' z <- mape((x - y),x)
+#' z <- mape(x, y)
 #' z
 # Function that returns Mean Absolute Error
 mape <- function(obs, pred)
 {
-  mapeVal <- mean(abs(obs - pred)* 100/obs)
+  mapeVal <- mean(abs(obs - pred)* 100/obs, na.rm = TRUE)
   return(mapeVal)
 }
 

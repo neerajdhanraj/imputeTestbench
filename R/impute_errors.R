@@ -116,7 +116,7 @@ impute_errors <- function(dataIn = NULL, smps = 'mcar', methods = c("na.approx",
   ##
   # summarize for output
   out <- lapply(errall, function(x) unlist(lapply(x, mean)))
-  out <- c(list(Parameter = errorParameter, Missing_Percent = percs), out)
+  out <- c(list(Parameter = errorParameter, MissingPercent = percs), out)
 
   # create errprof object
   out <- structure(

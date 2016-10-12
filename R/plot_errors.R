@@ -35,9 +35,9 @@ plot_errors.errprof <- function(dataIn, plotType = c('boxplot'), ...){
     toplo <- melt(toplo)
     percs <- dataIn$MissingPercent
     toplo$L2 <- factor(toplo$L2, levels = unique(toplo$L2), labels = percs)
-    names(toplo) <- c('Error value', 'Percent of missing values', 'Methods')
+    names(toplo) <- c('Error value', 'Percent of missing observations', 'Methods')
 
-    p <- ggplot(toplo, aes(x = `Percent of missing values`, y = `Error value`)) +
+    p <- ggplot(toplo, aes(x = `Percent of missing observations`, y = `Error value`)) +
       ggtitle(dataIn$Parameter) +
       geom_boxplot(aes(fill = Methods)) +
       theme_bw()
@@ -50,12 +50,12 @@ plot_errors.errprof <- function(dataIn, plotType = c('boxplot'), ...){
   toplo <- data.frame(dataIn[-1])
   toplo <- melt(toplo, id.var = 'MissingPercent')
   toplo$MissingPercent <- factor(toplo$MissingPercent)
-  names(toplo) <- c('Percent of missing values', 'Methods', 'Error value')
+  names(toplo) <- c('Percent of missing observations', 'Methods', 'Error value')
 
   # barplot
   if(plotType == 'bar'){
 
-    p <- ggplot(toplo, aes(x = `Percent of missing values`, y = `Error value`)) +
+    p <- ggplot(toplo, aes(x = `Percent of missing observations`, y = `Error value`)) +
       ggtitle(dataIn$Parameter) +
       geom_bar(aes(fill = Methods), stat = 'identity', position = 'dodge') +
       theme_bw()
@@ -67,7 +67,7 @@ plot_errors.errprof <- function(dataIn, plotType = c('boxplot'), ...){
   # line plot
   if(plotType == 'line'){
 
-    p <- ggplot(toplo, aes(x = `Percent of missing values`, y = `Error value`, group = Methods)) +
+    p <- ggplot(toplo, aes(x = `Percent of missing observations`, y = `Error value`, group = Methods)) +
       ggtitle(dataIn$Parameter) +
       geom_line() +
       geom_point(aes(fill = Methods), shape = 21, size = 5) +

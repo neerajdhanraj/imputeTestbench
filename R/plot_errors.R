@@ -31,7 +31,7 @@ plot_errors.errprof <- function(dataIn, plotType = c('boxplot'), ...){
 
     toplo <- attr(dataIn, 'errall')
     toplo <- melt(toplo)
-    percs <- dataIn$Missing_Percent
+    percs <- dataIn$MissingPercent
     toplo$L2 <- factor(toplo$L2, levels = unique(toplo$L2), labels = percs)
     names(toplo) <- c('Error value', 'Percent of missing values', 'Methods')
 
@@ -45,8 +45,8 @@ plot_errors.errprof <- function(dataIn, plotType = c('boxplot'), ...){
   if(plotType == 'bar'){
 
     toplo <- data.frame(dataIn[-1])
-    toplo <- melt(toplo, id.var = 'Missing_Percent')
-    toplo$Missing_Percent <- factor(toplo$Missing_Percent)
+    toplo <- melt(toplo, id.var = 'MissingPercent')
+    toplo$Missing_Percent <- factor(toplo$MissingPercent)
     names(toplo) <- c('Percent of missing values', 'Methods', 'Error value')
 
     p <- ggplot(toplo, aes(x = `Percent of missing values`, y = `Error value`)) +

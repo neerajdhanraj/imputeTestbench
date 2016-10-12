@@ -8,12 +8,12 @@ Description: Provides a Test bench for comparison of missing
     bench and to compare with other methods. The function 'append_method()' allows
     to add multiple numbers of methods to the existing methods available in test bench.
 Imports:
-    imputeTS,
+    dplyr,
     forecast,
     ggplot2,
+    imputeTS,
     reshape2,
     stats,
-    dplyr,
     tidyr,
     zoo
 BugReports:	https://github.com/neerajdhanraj/imputeTestbench/issues

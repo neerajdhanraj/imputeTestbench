@@ -12,12 +12,12 @@ plot_errors(dataIn, ...)
 \arguments{
 \item{dataIn}{an errprof object returned from \code{\link{impute_errors}}}
 
-\item{plotType}{chr string indicating plot type, accepted values are \code{"boxplot"} or \code{"bar"}}
+\item{plotType}{chr string indicating plot type, accepted values are \code{"boxplot"}, \code{"bar"}, or \code{"line"}}
 
 \item{\dots}{arguments passed to or from other methods}
 }
 \value{
-A ggplot object that can be further modified.  The entire range of errors are shown if \code{plotType = "boxplot"}, otherwise the averages are shown if \code{plotType = "bar"}.
+A ggplot object that can be further modified.  The entire range of errors are shown if \code{plotType = "boxplot"}, otherwise the averages are shown if \code{plotType = "bar"} or \code{"line"}.
 }
 \description{
 Function to plot the Error Comparison
@@ -26,5 +26,6 @@ Function to plot the Error Comparison
 aa <- impute_errors()
 plot_errors(aa)
 plot_errors(aa, plotType = 'bar')
+plot_errors(aa, plotType = 'line')
 }
 

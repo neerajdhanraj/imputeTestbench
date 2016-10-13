@@ -124,7 +124,7 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50,
   if(plot){
 
     miss <- is.na(out[[1]])
-    plot(1:length(datin), datin)
+    plot(1:length(datin), datin, xlab = '', ylab = 'Obs')
     points(which(miss), datin[miss], col = 'red')
 
 

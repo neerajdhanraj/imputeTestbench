@@ -129,11 +129,12 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50,
     miss <- is.na(out[[1]])
     toplo <- data.frame(x = 1:length(datin), y = datin, col = 'Observed', stringsAsFactors = FALSE)
     toplo$col[miss] <- 'Removed'
-    p <- ggplot(toplo, aes(x = x, y = y, shape = col)) +
+    p <- ggplot(toplo, aes(x = x, y = y, shape = col, colour = col)) +
       scale_shape_manual(values = c(16, 21)) +
+      scale_colour_manual(values = c('#F8766D', 'black')) +
       geom_point() +
       theme_bw() +
-      theme(legend.title = element_blank()) +
+      theme(legend.title = element_blank(), plot.title = element_text(size = 12)) +
       ggtitle(lab)
     return(p)
 

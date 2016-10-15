@@ -76,7 +76,9 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50,
     # create samples for each repetition
     for(i in 1:repetition){
 
-      pool <- 1:length(datin)
+      # pool is the number of obs up to the max minus blck size
+      # ensures that those on the right do not overlap the end
+      pool <- 1:(length(datin) - blck + 1)
 
       # initial grab
       grbs <- sample(pool, blck_sd, replace = F) %>%
@@ -122,7 +124,7 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50,
   if(plot){
 
     miss <- is.na(out[[1]])
-    plot(1:length(datin), datin)
+    plot(1:length(datin), datin, xlab = '', ylab = 'Obs')
     points(which(miss), datin[miss], col = 'red')
 
 

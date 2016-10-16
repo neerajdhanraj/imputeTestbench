@@ -16,7 +16,7 @@
 #'
 #' @export
 #'
-#' @import dplyr
+#' @import dplyr ggplot2
 #'
 #' @examples
 #' a <- rnorm(1000)
@@ -29,6 +29,9 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50,
   # sanity checks
   if(!smps %in% c('mcar', 'mar'))
     stop('smps must be mcar or mar')
+
+  # label for plot
+  lab <- paste0('b = ', b, ', smps = "', smps, '", blck = ', blck, ', blckper = ', blckper)
 
   # sample to take for missing data given x
   pool <- 1:length(datin)
@@ -124,9 +127,16 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50,
   if(plot){
 
     miss <- is.na(out[[1]])
-    plot(1:length(datin), datin, xlab = '', ylab = 'Obs')
-    points(which(miss), datin[miss], col = 'red')
-
+    toplo <- data.frame(x = 1:length(datin), y = datin, col = 'Observed', stringsAsFactors = FALSE)
+    toplo$col[miss] <- 'Removed'
+    p <- ggplot(toplo, aes(x = x, y = y, shape = col, colour = col)) +
+      scale_shape_manual(values = c(16, 21)) +
+      scale_colour_manual(values = c('#F8766D', 'black')) +
+      geom_point() +
+      theme_bw() +
+      theme(legend.title = element_blank(), plot.title = element_text(size = 12)) +
+      ggtitle(lab)
+    return(p)
 
   } else {
 

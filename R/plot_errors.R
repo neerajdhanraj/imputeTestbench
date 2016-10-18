@@ -70,7 +70,7 @@ plot_errors.errprof <- function(dataIn, plotType = c('boxplot'), ...){
     p <- ggplot(toplo, aes(x = `Percent of missing observations`, y = `Error value`, group = Methods)) +
       ggtitle(dataIn$Parameter) +
       geom_line() +
-      geom_point(aes(fill = Methods), shape = 21, size = 5) +
+      geom_point(aes(fill = Methods), shape = 21, size = 5, alpha = 0.75) +
       theme_bw()
 
     return(p)

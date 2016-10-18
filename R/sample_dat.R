@@ -30,9 +30,6 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50,
   if(!smps %in% c('mcar', 'mar'))
     stop('smps must be mcar or mar')
 
-  # label for plot
-  lab <- paste0('b = ', b, ', smps = "', smps, '", blck = ', blck, ', blckper = ', blckper)
-
   # sample to take for missing data given x
   pool <- 1:length(datin)
   torm <- round(length(pool) * b/100)
@@ -40,6 +37,9 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50,
 
   # sampling complately at random
   if(smps == 'mcar'){
+
+    # label for plot
+    lab <- paste0('b = ', b, ', smps = "', smps, '"')
 
     for(i in 1:repetition){
 
@@ -54,6 +54,9 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50,
 
   # sampling at random
   if(smps == 'mar'){
+
+    # label for plot
+    lab <- paste0('b = ', b, ', smps = "', smps, '", blck = ', blck, ', blckper = ', blckper)
 
     # block size
     if(blckper){
@@ -132,9 +135,13 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50,
     p <- ggplot(toplo, aes(x = x, y = y, shape = col, colour = col)) +
       scale_shape_manual(values = c(16, 21)) +
       scale_colour_manual(values = c('#F8766D', 'black')) +
-      geom_point() +
+      geom_point(alpha = 0.75) +
       theme_bw() +
-      theme(legend.title = element_blank(), plot.title = element_text(size = 12)) +
+      theme(
+        legend.title = element_blank(),
+        plot.title = element_text(size = 12),
+        legend.position = 'top'
+        ) +
       ggtitle(lab)
     return(p)
 

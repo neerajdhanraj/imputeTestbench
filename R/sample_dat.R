@@ -140,7 +140,8 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50,
       theme(
         legend.title = element_blank(),
         plot.title = element_text(size = 12),
-        legend.position = 'top'
+        legend.position = 'top',
+        legend.key = element_blank()
         ) +
       ggtitle(lab)
     return(p)

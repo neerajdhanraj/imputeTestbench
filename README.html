@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title></title>
+
+<script src="README_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="README_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="README_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="README_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="README_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="README_files/highlight/default.css"
+      type="text/css" />
+<script src="README_files/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="README_files/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="fluid-row" id="header">
+
+
+
+
+</div>
+
+
+<div id="imputetestbench" class="section level2">
+<h2>imputeTestbench</h2>
+<div id="neeraj-bokde-neerajdhanrajgmail.com-marcus-w.-beck-beck.marcusepa.gov" class="section level4">
+<h4><em>Neeraj Bokde, <a href="mailto:neerajdhanraj@gmail.com">neerajdhanraj@gmail.com</a>, Marcus W. Beck, <a href="mailto:beck.marcus@epa.gov">beck.marcus@epa.gov</a></em></h4>
+<p>This is the development repository for the imputeTestbench package. This package provides a testbench for comparing imputation methods for missing data in univariate time series.</p>
+<p>The development version of this package can be installed from Github:</p>
+<pre class="r"><code>install.packages(&#39;devtools&#39;)
+library(devtools)
+install_github(&#39;neerajdhanraj/imputeTestbench&#39;, ref = &#39;development&#39;)</code></pre>
+<p>The current release can be installed from CRAN:</p>
+<pre class="r"><code>install.packages(&#39;imputeTestbench&#39;)</code></pre>
+</div>
+<div id="basic-use" class="section level4">
+<h4>Basic use</h4>
+<p>The core function is <code>impute_errors()</code>. See the help documentation for more details.</p>
+<pre class="r"><code>library(imputeTestbench)
+a &lt;- impute_errors()
+a</code></pre>
+<pre><code>## $Parameter
+## [1] &quot;rmse&quot;
+## 
+## $MissingPercent
+## [1] 10 20 30 40 50 60 70 80 90
+## 
+## $na.approx
+## [1]  0.9314818  1.3907689  2.0607283  2.8861244  3.5637052  4.9158789
+## [7]  6.4131929  8.2528277 10.0580649
+## 
+## $na.interp
+## [1] 0.756944 1.099818 1.412798 1.586325 1.835997 2.119822 2.214915 2.533648
+## [9] 3.251729
+## 
+## $na.interpolation
+## [1]  0.9771439  1.5100036  2.0772976  2.9099799  3.6141572  5.0736151
+## [7]  6.5072629  8.3734161 10.1321833
+## 
+## $na.locf
+## [1]  1.865308  3.006465  3.819017  5.002598  6.276696  7.543415  9.230569
+## [8] 10.389976 11.396348
+## 
+## $na.mean
+## [1] 2.738661 3.783800 4.784753 5.517070 5.996845 6.664098 7.240930 7.822131
+## [9] 8.265659</code></pre>
+<pre class="r"><code>plot_errors(a, plotType = &#39;line&#39;)</code></pre>
+<p><img src="README_files/figure-html/unnamed-chunk-3-1.png" /><!-- --></p>
+</div>
+<div id="citation" class="section level4">
+<h4>Citation</h4>
+<p>Neeraj Bokde and Marcus W. Beck (2016). imputeTestbench: Test Bench for the comparison of imputation methods. R package version 3.0. <a href="http://www.neerajbokde.com/cran/imputetestbench" class="uri">http://www.neerajbokde.com/cran/imputetestbench</a></p>
+</div>
+<div id="bug-reports" class="section level4">
+<h4>Bug reports</h4>
+<p>Please submit any bug reports (or suggestions) using the <a href="https://github.com/neerajdhanraj/imputeTestbench/issues">issues</a> tab of the GitHub page.</p>
+</div>
+<div id="license" class="section level4">
+<h4>License</h4>
+<p>This package is released in the public domain under the creative commons license CC0.</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

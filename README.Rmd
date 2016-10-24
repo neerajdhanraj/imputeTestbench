@@ -1,0 +1,56 @@
+---
+output:
+  html_document:
+    keep_md: yes
+    toc: no
+    self_contained: no
+  pdf_document:
+    toc: yes
+---
+
+## imputeTestbench
+
+#### *Neeraj Bokde, neerajdhanraj@gmail.com, Marcus W. Beck, beck.marcus@epa.gov*
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is the development repository for the imputeTestbench package.  This package provides a testbench for comparing imputation methods for missing data in univariate time series. 
+
+The development version of this package can be installed from Github:
+
+```{r, eval = FALSE}
+install.packages('devtools')
+library(devtools)
+install_github('neerajdhanraj/imputeTestbench', ref = 'development')
+```
+
+The current release can be installed from CRAN:
+
+```{r, eval = FALSE}
+install.packages('imputeTestbench')
+```
+
+#### Basic use
+
+The core function is `impute_errors()`.  See the help documentation for more details.
+
+```{r message = F}
+library(imputeTestbench)
+a <- impute_errors()
+a
+plot_errors(a, plotType = 'line')
+```
+
+#### Citation
+
+Neeraj Bokde and Marcus W. Beck (2016). imputeTestbench: Test Bench for the comparison of imputation methods. R package version 3.0. http://www.neerajbokde.com/cran/imputetestbench
+
+#### Bug reports 
+
+Please submit any bug reports (or suggestions) using the [issues](https://github.com/neerajdhanraj/imputeTestbench/issues) tab of the GitHub page.
+
+#### License
+
+This package is released in the public domain under the creative commons license CC0.

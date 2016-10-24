@@ -3,6 +3,12 @@
 
 #### *Neeraj Bokde, neerajdhanraj@gmail.com, Marcus W. Beck, beck.marcus@epa.gov*
 
+[![Travis-CI Build Status](https://travis-ci.org/fawda123/imputeTestbench.svg?branch=master)](https://travis-ci.org/fawda123/imputeTestbench)
+
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/fawda123/imputeTestbench?branch=master&svg=true)](https://ci.appveyor.com/project/fawda123/imputeTestbench)
+
+[![Downloads from the RStudio CRAN mirror](http://cranlogs.r-pkg.org/badges/grand-total/imputeTestbench)](http://cran.rstudio.com/package=imputeTestbench)
+
 
 
 This is the development repository for the imputeTestbench package.  This package provides a testbench for comparing imputation methods for missing data in univariate time series. 
@@ -42,24 +48,24 @@ a
 ## [1] 10 20 30 40 50 60 70 80 90
 ## 
 ## $na.approx
-## [1]  0.9314818  1.3907689  2.0607283  2.8861244  3.5637052  4.9158789
-## [7]  6.4131929  8.2528277 10.0580649
+## [1] 0.9487195 1.3551689 1.8287319 2.8499620 3.6178854 4.6592562 6.4600441
+## [8] 8.2361118 9.8981246
 ## 
 ## $na.interp
-## [1] 0.756944 1.099818 1.412798 1.586325 1.835997 2.119822 2.214915 2.533648
-## [9] 3.251729
+## [1] 0.7679054 1.1328513 1.3713050 1.6197456 1.8502538 2.1180169 2.3079583
+## [8] 2.5567402 3.0259601
 ## 
 ## $na.interpolation
-## [1]  0.9771439  1.5100036  2.0772976  2.9099799  3.6141572  5.0736151
-## [7]  6.5072629  8.3734161 10.1321833
+## [1] 0.9701737 1.4012817 1.8520263 2.8657296 3.6599247 4.7046867 6.5583047
+## [8] 8.3618126 9.9443988
 ## 
 ## $na.locf
-## [1]  1.865308  3.006465  3.819017  5.002598  6.276696  7.543415  9.230569
-## [8] 10.389976 11.396348
+## [1]  1.768138  3.008227  3.733738  5.168307  6.354235  7.696832  9.243164
+## [8] 10.419655 11.245193
 ## 
 ## $na.mean
-## [1] 2.738661 3.783800 4.784753 5.517070 5.996845 6.664098 7.240930 7.822131
-## [9] 8.265659
+## [1] 2.838550 3.868051 4.646613 5.514563 6.083541 6.664628 7.251263 7.673111
+## [9] 8.443754
 ```
 
 ```r

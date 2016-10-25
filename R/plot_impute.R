@@ -79,24 +79,24 @@ plot_impute <- function(dataIn = NULL, smps = 'mcar', methods = c("na.approx", "
   toplo$Filled[is.na(out[[1]])] <- 1
   toplo$Filled <- factor(toplo$Filled)
   toplo$Actual <- dataIn
-  toplo$ind <- 1:nrow(toplo)
-  toplo <- tidyr::gather(toplo, 'Method', 'Value', -ind, -Filled, -Actual)
+  toplo$Actual[toplo$Filled %in% '0'] <- NA
+  toplo$Time <- 1:nrow(toplo)
+  toplo <- tidyr::gather(toplo, 'Method', 'Value', -Time, -Filled, -Actual)
 
   # plot
-  p <- ggplot(toplo, aes(x = ind, y = Value)) +
-    geom_point(aes(colour = Filled)) +
+  p <- ggplot(toplo, aes(x = Time, y = Value)) +
+    geom_point(aes(colour = Filled), alpha = 0.75, na.rm = TRUE) +
     facet_wrap(~Method, ncol = 1) +
     theme_bw() +
     theme(
-      axis.title.x = element_blank(),
-      legend.position = 'top'
+      legend.position = 'top',
+      legend.key = element_blank()
       )
 
   # add actual missing values if T
   if(showmiss)
     p <- p +
-      geom_point(aes(y = Actual), pch = 21, fill = NA) +
-      geom_point(aes(colour = Filled))
+      geom_point(aes(y = Actual), pch = 21, fill = NA, alpha = 0.75, na.rm = TRUE)
 
   return(p)
 

@@ -4,10 +4,12 @@
 \alias{rmse}
 \title{Root Mean Square Error Calculation}
 \usage{
-rmse(diff)
+rmse(obs, pred)
 }
 \arguments{
-\item{diff}{is the difference between Original data and Predicted data}
+\item{obs}{numeric vector of original data}
+
+\item{pred}{numeric vector of predicted data}
 }
 \value{
 rmseVal as Root Mean Square Error
@@ -19,7 +21,7 @@ takes difference between Original data and Predicted data as input
 ## Generate 100 random numbers within some limits
 x <- sample(1:7, 100, replace = TRUE)
 y <- sample(1:4, 100, replace = TRUE)
-z <- rmse(x - y)
+z <- rmse(x, y)
 z
 }
 

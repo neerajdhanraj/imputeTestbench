@@ -4,25 +4,38 @@
 \alias{impute_errors}
 \title{Function working as testbench for comparison of imputing models}
 \usage{
-impute_errors(dataIn, missPercentFrom, missPercentTo, interval, repetition,
-  errorParameter, MethodPath, MethodName)
+impute_errors(dataIn = NULL, smps = "mcar", methods = c("na.approx",
+  "na.interp", "na.interpolation", "na.locf", "na.mean"), methodPath = NULL,
+  errorParameter = "rmse", errorPath = NULL, blck = 50, blckper = TRUE,
+  missPercentFrom = 10, missPercentTo = 90, interval = 10,
+  repetition = 10, addl_arg = NULL)
 }
 \arguments{
-\item{dataIn}{as imput time series for testing}
+\item{dataIn}{input \code{\link[stats]{ts}} for testing, defaults to \code{\link[datasets]{nottem}}}
 
-\item{missPercentFrom}{as variable from which percent of missing values to be considered}
+\item{smps}{chr string indicating sampling type for generating missing data, see details}
 
-\item{missPercentTo}{as variable to state upto what percent missing values are to be considered}
+\item{methods}{chr string of imputation methods to use, one to many.  A user-supplied function can be included if \code{MethodPath} is used, see details.}
 
-\item{interval}{as interval between consecutive missPercent values}
+\item{methodPath}{chr string of location of function for the proposed imputation method}
 
-\item{repetition}{as an integer to decide the numbers of repetition to be done for each missPercent value}
+\item{errorParameter}{chr string indicating which error type to use, acceptable values are \code{"rmse"} (default), \code{"mae"}, or \code{"mape"}.  Alternatively, a user-supplied function can be passed if \code{errorPath} is used, see details.}
 
-\item{errorParameter}{as type of error calculation (RMSE, MAE or MAPE)}
+\item{errorPath}{chr string of location of error function for evaluating imputations}
 
-\item{MethodPath}{as location of function for the proposed imputation method}
+\item{blck}{numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mcar'}}
 
-\item{MethodName}{as name for function for the proposed imputation method}
+\item{blckper}{logical indicating if the value passed to \code{blck} is a percentage of the sample size for missing data, otherwise \code{blck} indicates number of observations}
+
+\item{missPercentFrom}{numeric from which percent of missing values to be considered}
+
+\item{missPercentTo}{numeric for up to what percent missing values are to be considered}
+
+\item{interval}{numeric for interval between consecutive missPercent values}
+
+\item{repetition}{numeric for repetitions to be done for each missPercent value}
+
+\item{addl_arg}{arguments passed to other imputation methods as a list of lists, see details.}
 }
 \value{
 Returns error comparison for imputation methods
@@ -30,8 +43,24 @@ Returns error comparison for imputation methods
 \description{
 Function working as testbench for comparison of imputing models
 }
+\details{
+The default methods for \code{impute_errors} are \code{\link[zoo]{na.approx}}, \code{\link[forecast]{na.interp}}, \code{\link[imputeTS]{na.interpolation}}, \code{\link[zoo]{na.locf}},  and \code{\link[imputeTS]{na.mean}}.  See the help file for each for additional documentation. Additional arguments for the imputation functions are passed as a list of lists to the \code{addl_arg} argument, where the list contains one to many elements that are named by the \code{methods}. The elements of the master list are lists with arguments for the relevant methods. See the examples.
+
+A user-supplied function can also be passed to \code{methods} as an additional imputation method.  A character string indicating the path of the function must also be supplied to \code{methodPath}.  The path must point to a function where the first argument is the time series to impute.
+
+An alternative error function can also be passed to \code{errorParameter} if \code{errorPath} is not \code{NULL}.  The function specified in \code{errorPath} must have two arguments where the first is a vector for the observed time series and the second is a vector for the predicted time series.
+
+The \code{smps} argument indicates the type of sampling for generating missing data.  Options are \code{smps = 'mcar'} for missing completely at random and \code{smps = 'mar'} for missing at random.  Additional information about the sampling method is described in \code{\link{sample_dat}}. The relevant arguments for \code{smps = 'mar'} are \code{blck} and \code{blckper} which greatly affect the sampling method.
+}
 \examples{
-# aa <- impute_errors()
-# aa
+aa <- impute_errors()
+aa
+plot_errors(aa)
+
+# passing addtional arguments to imputation methods
+impute_errors(addl_arg = list(na.mean = list(option = 'mode')))
+}
+\seealso{
+\code{\link{sample_dat}}
 }
 

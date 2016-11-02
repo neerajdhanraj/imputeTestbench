@@ -1,8 +1,8 @@
 Package: imputeTestbench
 Type: Package
 Title: Test Bench for the comparison of imputation methods
-Date: 2016-10-24
-Version: 3.0
+Date: 2016-11-02
+Version: 3.0.0
 Description: Provides a test bench for the comparison of missing data imputation 
     methods in univariate time series. Imputation methods are compared using RMSE, 
     MAE or MAPE error metrics. Proposed imputation methods and alternative error 

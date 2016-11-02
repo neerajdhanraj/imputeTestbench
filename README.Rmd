@@ -16,7 +16,7 @@ output:
 
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/fawda123/imputeTestbench?branch=master&svg=true)](https://ci.appveyor.com/project/fawda123/imputeTestbench)
 
-[![Downloads from the RStudio CRAN mirror](http://cranlogs.r-pkg.org/badges/grand-total/imputeTestbench)](http://cran.rstudio.com/package=imputeTestbench)
+[![Downloads from the RStudio CRAN mirror](http://cranlogs.r-pkg.org/badges/grand-total/imputeTestbench)](https://CRAN.R-project.org/package=pkgname)
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)

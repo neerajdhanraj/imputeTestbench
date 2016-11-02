@@ -1,6 +1,6 @@
 Package: imputeTestbench
 Type: Package
-Title: Test Bench for the comparison of imputation methods
+Title: Test Bench for the Comparison of Imputation Methods
 Date: 2016-11-02
 Version: 3.0.0
 Description: Provides a test bench for the comparison of missing data imputation 

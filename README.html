@@ -127,7 +127,7 @@ $(document).ready(function () {
 <h4><em>Neeraj Bokde, <a href="mailto:neerajdhanraj@gmail.com">neerajdhanraj@gmail.com</a>, Marcus W. Beck, <a href="mailto:beck.marcus@epa.gov">beck.marcus@epa.gov</a></em></h4>
 <p><a href="https://travis-ci.org/fawda123/imputeTestbench"><img src="https://travis-ci.org/fawda123/imputeTestbench.svg?branch=master" alt="Travis-CI Build Status" /></a></p>
 <p><a href="https://ci.appveyor.com/project/fawda123/imputeTestbench"><img src="https://ci.appveyor.com/api/projects/status/github/fawda123/imputeTestbench?branch=master&amp;svg=true" alt="AppVeyor Build Status" /></a></p>
-<p><a href="https://cran.r-project.org/web/packages/imputeTestbench/index.html"><img src="http://cranlogs.r-pkg.org/badges/grand-total/imputeTestbench" alt="Downloads from the RStudio CRAN mirror" /></a></p>
+<p><a href="https://CRAN.R-project.org/package=imputeTestbench"><img src="http://cranlogs.r-pkg.org/badges/grand-total/imputeTestbench" alt="Downloads from the RStudio CRAN mirror" /></a></p>
 <p>This is the development repository for the imputeTestbench package. This package provides a testbench for comparing imputation methods for missing data in univariate time series.</p>
 <p>The development version of this package can be installed from Github:</p>
 <pre class="r"><code>install.packages(&#39;devtools&#39;)
@@ -149,24 +149,24 @@ a</code></pre>
 ## [1] 10 20 30 40 50 60 70 80 90
 ## 
 ## $na.approx
-## [1]  0.8758017  1.3884222  2.0637862  2.7264405  3.5484296  5.2247580
-## [7]  6.6919063  8.5251748 10.2467772
+## [1] 0.901363 1.482835 1.958872 2.561620 3.469172 4.475716 6.442243 8.398182
+## [9] 9.978482
 ## 
 ## $na.interp
-## [1] 0.7829411 1.1349737 1.4107251 1.6532467 1.8382651 2.0613671 2.2514525
-## [8] 2.5821119 3.1625840
+## [1] 0.8001211 1.2240711 1.4138565 1.6581240 1.9295977 2.0984056 2.2763186
+## [8] 2.5622631 3.4401437
 ## 
 ## $na.interpolation
-## [1]  0.9264386  1.4037472  2.0772274  2.9411888  3.5745095  5.2742354
-## [7]  6.8345494  8.6221304 10.3547366
+## [1]  0.9089811  1.5266646  2.0002243  2.6406035  3.4855723  4.6469917
+## [7]  6.5879328  8.4999919 10.1895907
 ## 
 ## $na.locf
-## [1]  1.678392  2.711533  3.756034  4.781117  6.367100  7.958009  9.274554
-## [8] 10.077474 11.891015
+## [1]  1.821598  2.800376  3.981163  4.881498  6.313571  8.063412  8.970904
+## [8] 10.464801 11.432153
 ## 
 ## $na.mean
-## [1] 2.755701 3.807212 4.694296 5.493993 6.073467 6.710091 7.168344 7.770900
-## [9] 8.331260</code></pre>
+## [1] 2.654795 3.788465 4.684407 5.436173 5.943522 6.615894 7.252700 7.840248
+## [9] 8.306318</code></pre>
 <pre class="r"><code>plot_errors(a, plotType = &#39;line&#39;)</code></pre>
 <p><img src="README_files/figure-html/unnamed-chunk-3-1.png" /><!-- --></p>
 </div>

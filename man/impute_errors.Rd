@@ -4,26 +4,26 @@
 \alias{impute_errors}
 \title{Function working as testbench for comparison of imputing models}
 \usage{
-impute_errors(dataIn = NULL, smps = "mcar", methods = c("na.approx",
-  "na.interp", "na.interpolation", "na.locf", "na.mean"), methodPath = NULL,
+impute_errors(dataIn, smps = "mcar", methods = c("na.approx", "na.interp",
+  "na.interpolation", "na.locf", "na.mean"), methodPath = NULL,
   errorParameter = "rmse", errorPath = NULL, blck = 50, blckper = TRUE,
   missPercentFrom = 10, missPercentTo = 90, interval = 10,
   repetition = 10, addl_arg = NULL)
 }
 \arguments{
-\item{dataIn}{input \code{\link[stats]{ts}} for testing, defaults to \code{\link[datasets]{nottem}}}
+\item{dataIn}{input \code{\link[stats]{ts}} for testing}
 
 \item{smps}{chr string indicating sampling type for generating missing data, see details}
 
 \item{methods}{chr string of imputation methods to use, one to many.  A user-supplied function can be included if \code{MethodPath} is used, see details.}
 
-\item{methodPath}{chr string of location of function for the proposed imputation method}
+\item{methodPath}{chr string of location of script containing one or more functions for the proposed imputation method(s)}
 
 \item{errorParameter}{chr string indicating which error type to use, acceptable values are \code{"rmse"} (default), \code{"mae"}, or \code{"mape"}.  Alternatively, a user-supplied function can be passed if \code{errorPath} is used, see details.}
 
-\item{errorPath}{chr string of location of error function for evaluating imputations}
+\item{errorPath}{chr string of location of script containing one or more error functions for evaluating imputations}
 
-\item{blck}{numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mcar'}}
+\item{blck}{numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mar'}}
 
 \item{blckper}{logical indicating if the value passed to \code{blck} is a percentage of the sample size for missing data, otherwise \code{blck} indicates number of observations}
 
@@ -53,12 +53,12 @@ An alternative error function can also be passed to \code{errorParameter} if \co
 The \code{smps} argument indicates the type of sampling for generating missing data.  Options are \code{smps = 'mcar'} for missing completely at random and \code{smps = 'mar'} for missing at random.  Additional information about the sampling method is described in \code{\link{sample_dat}}. The relevant arguments for \code{smps = 'mar'} are \code{blck} and \code{blckper} which greatly affect the sampling method.
 }
 \examples{
-aa <- impute_errors()
+aa <- impute_errors(dataIn = nottem)
 aa
 plot_errors(aa)
 
 # passing addtional arguments to imputation methods
-impute_errors(addl_arg = list(na.mean = list(option = 'mode')))
+impute_errors(dataIn = nottem, addl_arg = list(na.mean = list(option = 'mode')))
 }
 \seealso{
 \code{\link{sample_dat}}

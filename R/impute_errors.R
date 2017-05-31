@@ -1,12 +1,12 @@
 #' Function working as testbench for comparison of imputing models
 #'
-#' @param dataIn input \code{\link[stats]{ts}} for testing, defaults to \code{\link[datasets]{nottem}}
+#' @param dataIn input \code{\link[stats]{ts}} for testing
 #' @param smps chr string indicating sampling type for generating missing data, see details
 #' @param methods chr string of imputation methods to use, one to many.  A user-supplied function can be included if \code{MethodPath} is used, see details.
-#' @param methodPath chr string of location of function for the proposed imputation method
+#' @param methodPath chr string of location of script containing one or more functions for the proposed imputation method(s)
 #' @param errorParameter chr string indicating which error type to use, acceptable values are \code{"rmse"} (default), \code{"mae"}, or \code{"mape"}.  Alternatively, a user-supplied function can be passed if \code{errorPath} is used, see details.
-#' @param errorPath chr string of location of error function for evaluating imputations
-#' @param blck numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mcar'}
+#' @param errorPath chr string of location of script containing one or more error functions for evaluating imputations
+#' @param blck numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mar'}
 #' @param blckper logical indicating if the value passed to \code{blck} is a percentage of the sample size for missing data, otherwise \code{blck} indicates number of observations
 #' @param missPercentFrom numeric from which percent of missing values to be considered
 #' @param missPercentTo numeric for up to what percent missing values are to be considered
@@ -35,18 +35,14 @@
 #' @export
 #'
 #' @examples
-#' aa <- impute_errors()
+#' aa <- impute_errors(dataIn = nottem)
 #' aa
 #' plot_errors(aa)
 #'
 #' # passing addtional arguments to imputation methods
-#' impute_errors(addl_arg = list(na.mean = list(option = 'mode')))
-impute_errors <- function(dataIn = NULL, smps = 'mcar', methods = c("na.approx", "na.interp", "na.interpolation", "na.locf", "na.mean"),  methodPath = NULL, errorParameter = 'rmse', errorPath = NULL, blck = 50, blckper = TRUE, missPercentFrom = 10, missPercentTo = 90, interval = 10, repetition = 10, addl_arg = NULL)
+#' impute_errors(dataIn = nottem, addl_arg = list(na.mean = list(option = 'mode')))
+impute_errors <- function(dataIn, smps = 'mcar', methods = c("na.approx", "na.interp", "na.interpolation", "na.locf", "na.mean"),  methodPath = NULL, errorParameter = 'rmse', errorPath = NULL, blck = 50, blckper = TRUE, missPercentFrom = 10, missPercentTo = 90, interval = 10, repetition = 10, addl_arg = NULL)
 {
-
-  # Sample Dataset 'nottem' is provided for testing in default case.
-  if(is.null(dataIn))
-    dataIn <- nottem
 
   # source method if provided
   if(!is.null(methodPath))

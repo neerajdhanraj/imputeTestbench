@@ -16,7 +16,7 @@ plot_impute(dataIn = NULL, smps = "mcar", methods = c("na.approx",
 
 \item{methods}{chr string of imputation methods to use, one to many.  A user-supplied function can be included if \code{MethodPath} is used.}
 
-\item{methodPath}{chr string of location of function for the proposed imputation method}
+\item{methodPath}{chr string of location of script containing one or more functions for the proposed imputation method(s)}
 
 \item{blck}{numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mcar'}}
 

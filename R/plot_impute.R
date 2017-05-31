@@ -5,7 +5,7 @@
 #' @param dataIn input \code{\link[stats]{ts}} for testing, defaults to \code{\link[datasets]{nottem}}
 #' @param smps chr string indicating sampling type for generating missing data, see details
 #' @param methods chr string of imputation methods to use, one to many.  A user-supplied function can be included if \code{MethodPath} is used.
-#' @param methodPath chr string of location of function for the proposed imputation method
+#' @param methodPath chr string of location of script containing one or more functions for the proposed imputation method(s)
 #' @param blck numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mcar'}
 #' @param blckper logical indicating if the value passed to \code{blck} is a percentage of the sample size for missing data, otherwise \code{blck} indicates number of observations
 #' @param missPercent numeric for percent of missing values to be considered

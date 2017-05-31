@@ -14,7 +14,7 @@ sample_dat(datin, smps = "mcar", repetition = 10, b = 50, blck = 50,
 
 \item{repetition}{numeric for repetitions to be done for each missPercent value}
 
-\item{b}{numeric indicating sample size for missing data}
+\item{b}{numeric indicating the total amount of missing data as a percentage to remove from the complete time series}
 
 \item{blck}{numeric indicating block sizes as a proportion of the sample size for the missing data}
 

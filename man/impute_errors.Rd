@@ -17,13 +17,13 @@ impute_errors(dataIn = NULL, smps = "mcar", methods = c("na.approx",
 
 \item{methods}{chr string of imputation methods to use, one to many.  A user-supplied function can be included if \code{MethodPath} is used, see details.}
 
-\item{methodPath}{chr string of location of function for the proposed imputation method}
+\item{methodPath}{chr string of location of script containing one or more functions for the proposed imputation method(s)}
 
 \item{errorParameter}{chr string indicating which error type to use, acceptable values are \code{"rmse"} (default), \code{"mae"}, or \code{"mape"}.  Alternatively, a user-supplied function can be passed if \code{errorPath} is used, see details.}
 
-\item{errorPath}{chr string of location of error function for evaluating imputations}
+\item{errorPath}{chr string of location of script containing one or more error functions for evaluating imputations}
 
-\item{blck}{numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mcar'}}
+\item{blck}{numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mar'}}
 
 \item{blckper}{logical indicating if the value passed to \code{blck} is a percentage of the sample size for missing data, otherwise \code{blck} indicates number of observations}
 

@@ -10,3 +10,5 @@ cran-comments.md
 ^README_files/.*
 ^README_cache/.*
 README.Rmd
+^revdep/.*
+^cran-comments\.md$

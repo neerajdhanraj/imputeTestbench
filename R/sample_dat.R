@@ -5,7 +5,7 @@
 #' @param datin input numeric vector
 #' @param smps chr sring of sampling type to use, options are \code{"mcar"} or \code{"mar"}
 #' @param repetition numeric for repetitions to be done for each missPercent value
-#' @param b numeric indicating sample size for missing data
+#' @param b numeric indicating the total amount of missing data as a percentage to remove from the complete time series
 #' @param blck numeric indicating block sizes as a proportion of the sample size for the missing data
 #' @param blckper logical indicating if the value passed to \code{blck} is a proportion of \code{missper}, i.e., blocks are to be sized as a percentage of the total size of the missing data
 #' @param plot logical indicating if a plot is returned showing the sampled data, plots only the first repetition

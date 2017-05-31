@@ -23,7 +23,7 @@ A ggplot object that can be further modified.  The entire range of errors are sh
 Function to plot the Error Comparison
 }
 \examples{
-aa <- impute_errors()
+aa <- impute_errors(dataIn = nottem)
 plot_errors(aa)
 plot_errors(aa, plotType = 'bar')
 plot_errors(aa, plotType = 'line')

@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @examples
-#' aa <- impute_errors()
+#' aa <- impute_errors(dataIn = nottem)
 #' plot_errors(aa)
 #' plot_errors(aa, plotType = 'bar')
 #' plot_errors(aa, plotType = 'line')

@@ -4,13 +4,12 @@
 \alias{plot_impute}
 \title{Plot imputations}
 \usage{
-plot_impute(dataIn = NULL, smps = "mcar", methods = c("na.approx",
-  "na.interp", "na.interpolation", "na.locf", "na.mean"), methodPath = NULL,
-  blck = 50, blckper = TRUE, missPercent = 50, showmiss = FALSE,
-  addl_arg = NULL)
+plot_impute(dataIn, smps = "mcar", methods = c("na.approx", "na.interp",
+  "na.interpolation", "na.locf", "na.mean"), methodPath = NULL, blck = 50,
+  blckper = TRUE, missPercent = 50, showmiss = FALSE, addl_arg = NULL)
 }
 \arguments{
-\item{dataIn}{input \code{\link[stats]{ts}} for testing, defaults to \code{\link[datasets]{nottem}}}
+\item{dataIn}{input \code{\link[stats]{ts}} for testing}
 
 \item{smps}{chr string indicating sampling type for generating missing data, see details}
 
@@ -38,6 +37,6 @@ Plot imputations for data from multiple methods
 See the documentation for \code{\link{impute_errors}} for an explanation of the arguments.
 }
 \examples{
-plot_impute()
+plot_impute(dataIn = nottem)
 }
 

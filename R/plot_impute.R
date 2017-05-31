@@ -2,7 +2,7 @@
 #'
 #' Plot imputations for data from multiple methods
 #'
-#' @param dataIn input \code{\link[stats]{ts}} for testing, defaults to \code{\link[datasets]{nottem}}
+#' @param dataIn input \code{\link[stats]{ts}} for testing
 #' @param smps chr string indicating sampling type for generating missing data, see details
 #' @param methods chr string of imputation methods to use, one to many.  A user-supplied function can be included if \code{MethodPath} is used.
 #' @param methodPath chr string of location of script containing one or more functions for the proposed imputation method(s)
@@ -22,12 +22,8 @@
 #' @export
 #'
 #' @examples
-#' plot_impute()
-plot_impute <- function(dataIn = NULL, smps = 'mcar', methods = c("na.approx", "na.interp", "na.interpolation", "na.locf", "na.mean"),  methodPath = NULL, blck = 50, blckper = TRUE, missPercent = 50, showmiss = FALSE, addl_arg = NULL){
-
-  # Sample Dataset 'nottem' is provided for testing in default case.
-  if(is.null(dataIn))
-    dataIn <- nottem
+#' plot_impute(dataIn = nottem)
+plot_impute <- function(dataIn, smps = 'mcar', methods = c("na.approx", "na.interp", "na.interpolation", "na.locf", "na.mean"),  methodPath = NULL, blck = 50, blckper = TRUE, missPercent = 50, showmiss = FALSE, addl_arg = NULL){
 
   # source method if provided
   if(!is.null(methodPath))

@@ -1,6 +1,6 @@
 #' Function working as testbench for comparison of imputing models
 #'
-#' @param dataIn input \code{\link[stats]{ts}} for testing, defaults to \code{\link[datasets]{nottem}}
+#' @param dataIn input \code{\link[stats]{ts}} for testing
 #' @param smps chr string indicating sampling type for generating missing data, see details
 #' @param methods chr string of imputation methods to use, one to many.  A user-supplied function can be included if \code{MethodPath} is used, see details.
 #' @param methodPath chr string of location of script containing one or more functions for the proposed imputation method(s)
@@ -40,13 +40,9 @@
 #' plot_errors(aa)
 #'
 #' # passing addtional arguments to imputation methods
-#' impute_errors(addl_arg = list(na.mean = list(option = 'mode')))
-impute_errors <- function(dataIn = NULL, smps = 'mcar', methods = c("na.approx", "na.interp", "na.interpolation", "na.locf", "na.mean"),  methodPath = NULL, errorParameter = 'rmse', errorPath = NULL, blck = 50, blckper = TRUE, missPercentFrom = 10, missPercentTo = 90, interval = 10, repetition = 10, addl_arg = NULL)
+#' impute_errors(data = nottem, addl_arg = list(na.mean = list(option = 'mode')))
+impute_errors <- function(dataIn, smps = 'mcar', methods = c("na.approx", "na.interp", "na.interpolation", "na.locf", "na.mean"),  methodPath = NULL, errorParameter = 'rmse', errorPath = NULL, blck = 50, blckper = TRUE, missPercentFrom = 10, missPercentTo = 90, interval = 10, repetition = 10, addl_arg = NULL)
 {
-
-  # Sample Dataset 'nottem' is provided for testing in default case.
-  if(is.null(dataIn))
-    dataIn <- nottem
 
   # source method if provided
   if(!is.null(methodPath))

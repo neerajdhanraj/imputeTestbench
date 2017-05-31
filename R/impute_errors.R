@@ -35,12 +35,12 @@
 #' @export
 #'
 #' @examples
-#' aa <- impute_errors()
+#' aa <- impute_errors(dataIn = nottem)
 #' aa
 #' plot_errors(aa)
 #'
 #' # passing addtional arguments to imputation methods
-#' impute_errors(data = nottem, addl_arg = list(na.mean = list(option = 'mode')))
+#' impute_errors(dataIn = nottem, addl_arg = list(na.mean = list(option = 'mode')))
 impute_errors <- function(dataIn, smps = 'mcar', methods = c("na.approx", "na.interp", "na.interpolation", "na.locf", "na.mean"),  methodPath = NULL, errorParameter = 'rmse', errorPath = NULL, blck = 50, blckper = TRUE, missPercentFrom = 10, missPercentTo = 90, interval = 10, repetition = 10, addl_arg = NULL)
 {
 

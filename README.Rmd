@@ -44,7 +44,7 @@ The core function is `impute_errors()`.  See the help documentation for more det
 
 ```{r message = F}
 library(imputeTestbench)
-a <- impute_errors()
+a <- impute_errors(data = nottem)
 a
 plot_errors(a, plotType = 'line')
 ```

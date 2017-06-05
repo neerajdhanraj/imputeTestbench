@@ -53,12 +53,30 @@ An alternative error function can also be passed to \code{errorParameter} if \co
 The \code{smps} argument indicates the type of sampling for generating missing data.  Options are \code{smps = 'mcar'} for missing completely at random and \code{smps = 'mar'} for missing at random.  Additional information about the sampling method is described in \code{\link{sample_dat}}. The relevant arguments for \code{smps = 'mar'} are \code{blck} and \code{blckper} which greatly affect the sampling method.
 }
 \examples{
+\dontrun{
+# default options
 aa <- impute_errors(dataIn = nottem)
+aa
+plot_errors(aa)
+
+# change the simulation for missing obs
+aa <- impute_errors(dataIn = nottem, smps = 'mar')
+aa
+plot_errors(aa)
+
+# use one interpolation method, increase repetitions
+aa <- impute_errors(dataIn = nottem, methods = 'na.interp', repetition = 100)
+aa
+plot_errors(aa)
+
+# change the error metric
+aa <- impute_errors(dataIn = nottem, errorParameter = 'mae')
 aa
 plot_errors(aa)
 
 # passing addtional arguments to imputation methods
 impute_errors(dataIn = nottem, addl_arg = list(na.mean = list(option = 'mode')))
+}
 }
 \seealso{
 \code{\link{sample_dat}}

@@ -24,8 +24,14 @@ Function to plot the Error Comparison
 }
 \examples{
 aa <- impute_errors(dataIn = nottem)
+
+# default plot
 plot_errors(aa)
+
+# bar plot of averages at each repetition
 plot_errors(aa, plotType = 'bar')
+
+# line plot of averages at each repetition
 plot_errors(aa, plotType = 'line')
 }
 

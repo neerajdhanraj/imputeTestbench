@@ -17,7 +17,7 @@ plot_impute(dataIn, smps = "mcar", methods = c("na.approx", "na.interp",
 
 \item{methodPath}{chr string of location of script containing one or more functions for the proposed imputation method(s)}
 
-\item{blck}{numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mcar'}}
+\item{blck}{numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mar'}}
 
 \item{blckper}{logical indicating if the value passed to \code{blck} is a percentage of the sample size for missing data, otherwise \code{blck} indicates number of observations}
 
@@ -37,6 +37,16 @@ Plot imputations for data from multiple methods
 See the documentation for \code{\link{impute_errors}} for an explanation of the arguments.
 }
 \examples{
+# default
 plot_impute(dataIn = nottem)
+
+# change missing percent total
+plot_impute(dataIn = nottem, missPercent = 10)
+
+# show missing values
+plot_impute(dataIn = nottem, showmiss = TRUE)
+
+# use mar sampling
+plot_impute(dataIn = nottem, smps = 'mar')
 }
 

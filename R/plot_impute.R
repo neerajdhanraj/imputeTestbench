@@ -6,7 +6,7 @@
 #' @param smps chr string indicating sampling type for generating missing data, see details
 #' @param methods chr string of imputation methods to use, one to many.  A user-supplied function can be included if \code{MethodPath} is used.
 #' @param methodPath chr string of location of script containing one or more functions for the proposed imputation method(s)
-#' @param blck numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mcar'}
+#' @param blck numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mar'}
 #' @param blckper logical indicating if the value passed to \code{blck} is a percentage of the sample size for missing data, otherwise \code{blck} indicates number of observations
 #' @param missPercent numeric for percent of missing values to be considered
 #' @param showmiss logical if actual missing values are plotted
@@ -22,7 +22,17 @@
 #' @export
 #'
 #' @examples
+#' # default
 #' plot_impute(dataIn = nottem)
+#'
+#' # change missing percent total
+#' plot_impute(dataIn = nottem, missPercent = 10)
+#'
+#' # show missing values
+#' plot_impute(dataIn = nottem, showmiss = TRUE)
+#'
+#' # use mar sampling
+#' plot_impute(dataIn = nottem, smps = 'mar')
 plot_impute <- function(dataIn, smps = 'mcar', methods = c("na.approx", "na.interp", "na.interpolation", "na.locf", "na.mean"),  methodPath = NULL, blck = 50, blckper = TRUE, missPercent = 50, showmiss = FALSE, addl_arg = NULL){
 
   # source method if provided

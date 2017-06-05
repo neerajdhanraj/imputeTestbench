@@ -35,12 +35,30 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' # default options
 #' aa <- impute_errors(dataIn = nottem)
+#' aa
+#' plot_errors(aa)
+#'
+#' # change the simulation for missing obs
+#' aa <- impute_errors(dataIn = nottem, smps = 'mar')
+#' aa
+#' plot_errors(aa)
+#'
+#' # use one interpolation method, increase repetitions
+#' aa <- impute_errors(dataIn = nottem, methods = 'na.interp', repetition = 100)
+#' aa
+#' plot_errors(aa)
+#'
+#' # change the error metric
+#' aa <- impute_errors(dataIn = nottem, errorParameter = 'mae')
 #' aa
 #' plot_errors(aa)
 #'
 #' # passing addtional arguments to imputation methods
 #' impute_errors(dataIn = nottem, addl_arg = list(na.mean = list(option = 'mode')))
+#' }
 impute_errors <- function(dataIn, smps = 'mcar', methods = c("na.approx", "na.interp", "na.interpolation", "na.locf", "na.mean"),  methodPath = NULL, errorParameter = 'rmse', errorPath = NULL, blck = 50, blckper = TRUE, missPercentFrom = 10, missPercentTo = 90, interval = 10, repetition = 10, addl_arg = NULL)
 {
 
@@ -84,6 +102,7 @@ impute_errors <- function(dataIn, smps = 'mcar', methods = c("na.approx", "na.in
 
     # create the missing data for imputation
     b <- percs[x]
+
     out <- sample_dat(dataIn, smps = smps, b = b, repetition = repetition,
       blck = blck, blckper = blckper, plot = FALSE)
 

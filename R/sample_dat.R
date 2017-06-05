@@ -41,7 +41,7 @@
 #' p + scale_colour_manual(values = c('black', 'grey'))
 #' p + theme_minimal()
 #' p + ggtitle('Example of simulating missing data')
-sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50, blckper = TRUE, plot = FALSE){
+sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 10, blck = 50, blckper = TRUE, plot = FALSE){
 
   # sanity checks
   if(!smps %in% c('mcar', 'mar'))

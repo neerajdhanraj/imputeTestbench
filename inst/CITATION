@@ -1,0 +1,9 @@
+year <- sub("-.*", "", meta$Date)
+note <- sprintf("R package version %s", meta$Version)
+
+bibentry(bibtype = "Manual",
+         title = "{ImputeTestBench: Test Bench for the Comparison of Imputation Methods}",
+         author = c(person("Marcus", "Beck"), person("Neeraj", "Bokde")),
+         year = year,
+         note = note,
+         url = "https://CRAN.R-project.org/package=ImputeTestBench")

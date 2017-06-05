@@ -12,7 +12,7 @@
 #' @param showmiss logical if removed values missing from the complete dataset are plotted
 #' @param addl_arg arguments passed to other imputation methods as a list of lists, see details.
 #'
-#' @return A \code{\link[ggplot2]{ggplot}} object showing the imputed data for each method.  Red points are labelled as 'imputed' and blue points are labelled as 'retained' from the original data set.  Missing data that were removed can be added to the plot as open circles if \code{showmiss = TRUE}.
+#' @return A \code{\link[ggplot2]{ggplot}} object showing the imputed data for each method.  Red points are labelled as 'imputed' and blue points are labelled as 'retained' from the original data set.  Missing data that were removed can be added to the plot as open circles if \code{showmiss = TRUE}. See the examples for modifying the plot.
 #'
 #' @import ggplot2
 #' @import zoo
@@ -33,6 +33,14 @@
 #'
 #' # use mar sampling
 #' plot_impute(dataIn = nottem, smps = 'mar')
+#'
+#' # change the plot aesthetics
+#' library(ggplot2)
+#' p <- plot_impute(dataIn = nottem, smps = 'mar')
+#' p + scale_colour_manual(values = c('black', 'grey'))
+#' p + theme_minimal()
+#' p + ggtitle('Imputation examples with different methods')
+#' p + scale_y_continuous('Temp at Nottingham Castle (F)')
 plot_impute <- function(dataIn, smps = 'mcar', methods = c("na.approx", "na.interp", "na.interpolation", "na.locf", "na.mean"),  methodPath = NULL, blck = 50, blckper = TRUE, missPercent = 50, showmiss = FALSE, addl_arg = NULL){
 
   # source method if provided

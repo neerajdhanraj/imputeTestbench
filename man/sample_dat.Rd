@@ -46,5 +46,12 @@ sample_dat(a, plot = TRUE)
 
 # show a plot of one repetition, mar sampling
 sample_dat(a, smps = 'mar', plot = TRUE)
+
+# change plot aesthetics
+library(ggplot2)
+p <- sample_dat(a, plot = TRUE)
+p + scale_colour_manual(values = c('black', 'grey'))
+p + theme_minimal()
+p + ggtitle('Example of simulating missing data')
 }
 

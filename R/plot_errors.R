@@ -2,7 +2,6 @@
 #'
 #' @param dataIn an errprof object returned from \code{\link{impute_errors}}
 #' @param plotType chr string indicating plot type, accepted values are \code{"boxplot"}, \code{"bar"}, or \code{"line"}
-#' @param \dots arguments passed to or from other methods
 #'
 #' @return A ggplot object that can be further modified.  The entire range of errors are shown if \code{plotType = "boxplot"}, otherwise the averages are shown if \code{plotType = "bar"} or \code{"line"}.
 #'
@@ -22,15 +21,23 @@
 #'
 #' # line plot of averages at each repetition
 #' plot_errors(aa, plotType = 'line')
-plot_errors <- function(dataIn, ...) UseMethod('plot_errors')
+#'
+#' #' # change the plot aesthetics
+#' library(ggplot2)
+#' p <- plot_errors(aa)
+#' p + scale_fill_brewer(palette = 'Paired', guide_legend(title = 'Default'))
+#' p + theme(legend.position = 'top')
+#' p + theme_minimal()
+#' p + ggtitle('Distribution of error for imputed values')
+#' p + scale_y_continuous('RMSE')
+plot_errors <- function(dataIn, plotType = c('boxplot')) UseMethod('plot_errors')
 
 #' @rdname plot_errors
 #'
 #' @export
 #'
 #' @method plot_errors errprof
-plot_errors.errprof <- function(dataIn, plotType = c('boxplot'), ...){
-
+plot_errors.errprof <- function(dataIn, plotType = c('boxplot')){
   if(!plotType %in% c('boxplot', 'bar', 'line'))
     stop('plotType must be boxplot, bar, or line')
 

@@ -28,7 +28,7 @@ plot_impute(dataIn, smps = "mcar", methods = c("na.approx", "na.interp",
 \item{addl_arg}{arguments passed to other imputation methods as a list of lists, see details.}
 }
 \value{
-A \code{\link[ggplot2]{ggplot}} object showing the imputed data for each method.  Red points are labelled as 'imputed' and blue points are labelled as 'retained' from the original data set.  Missing data that were removed can be added to the plot as open circles if \code{showmiss = TRUE}.
+A \code{\link[ggplot2]{ggplot}} object showing the imputed data for each method.  Red points are labelled as 'imputed' and blue points are labelled as 'retained' from the original data set.  Missing data that were removed can be added to the plot as open circles if \code{showmiss = TRUE}. See the examples for modifying the plot.
 }
 \description{
 Plot imputations for data from multiple methods
@@ -48,5 +48,13 @@ plot_impute(dataIn = nottem, showmiss = TRUE)
 
 # use mar sampling
 plot_impute(dataIn = nottem, smps = 'mar')
+
+# change the plot aesthetics
+library(ggplot2)
+p <- plot_impute(dataIn = nottem, smps = 'mar')
+p + scale_colour_manual(values = c('black', 'grey'))
+p + theme_minimal()
+p + ggtitle('Imputation examples with different methods')
+p + scale_y_continuous('Temp at Nottingham Castle (F)')
 }
 

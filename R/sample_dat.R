@@ -34,6 +34,13 @@
 #'
 #' # show a plot of one repetition, mar sampling
 #' sample_dat(a, smps = 'mar', plot = TRUE)
+#'
+#' # change plot aesthetics
+#' library(ggplot2)
+#' p <- sample_dat(a, plot = TRUE)
+#' p + scale_colour_manual(values = c('black', 'grey'))
+#' p + theme_minimal()
+#' p + ggtitle('Example of simulating missing data')
 sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50, blckper = TRUE, plot = FALSE){
 
   # sanity checks
@@ -144,11 +151,11 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50,
   if(plot){
 
     miss <- is.na(out[[1]])
-    toplo <- data.frame(x = 1:length(datin), y = datin, col = 'Observed', stringsAsFactors = FALSE)
+    toplo <- data.frame(x = 1:length(datin), y = datin, col = 'Retained', stringsAsFactors = FALSE)
     toplo$col[miss] <- 'Removed'
     p <- ggplot(toplo, aes(x = x, y = y, shape = col, colour = col)) +
-      scale_shape_manual(values = c(16, 21)) +
-      scale_colour_manual(values = c('#F8766D', 'black')) +
+      scale_shape_manual(values = c(21, 16)) +
+      scale_colour_manual(values = c('black', '#00BFC4')) +
       geom_point(alpha = 0.75) +
       theme_bw() +
       theme(

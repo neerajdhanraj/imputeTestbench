@@ -9,10 +9,10 @@
 #' @param blck numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mar'}
 #' @param blckper logical indicating if the value passed to \code{blck} is a percentage of the sample size for missing data, otherwise \code{blck} indicates number of observations
 #' @param missPercent numeric for percent of missing values to be considered
-#' @param showmiss logical if actual missing values are plotted
+#' @param showmiss logical if removed values missing from the complete dataset are plotted
 #' @param addl_arg arguments passed to other imputation methods as a list of lists, see details.
 #'
-#' @return A \code{\link[ggplot2]{ggplot}} object showing the imputed data for each method.  Imputed data are colored as 'filled'.  Actual missing data can be added to the plot if \code{showmiss = TRUE}.
+#' @return A \code{\link[ggplot2]{ggplot}} object showing the imputed data for each method.  Red points are labelled as 'imputed' and blue points are labelled as 'retained' from the original data set.  Missing data that were removed can be added to the plot as open circles if \code{showmiss = TRUE}.
 #'
 #' @import ggplot2
 #' @import zoo
@@ -81,11 +81,11 @@ plot_impute <- function(dataIn, smps = 'mcar', methods = c("na.approx", "na.inte
   # prep for plot
   toplo <- do.call('cbind', c(imps))
   toplo <- data.frame(toplo)
-  toplo$Filled <- 0
-  toplo$Filled[is.na(out[[1]])] <- 1
+  toplo$Filled <- 'Retained'
+  toplo$Filled[is.na(out[[1]])] <- 'Imputed'
   toplo$Filled <- factor(toplo$Filled)
   toplo$Actual <- dataIn
-  toplo$Actual[toplo$Filled %in% '0'] <- NA
+  toplo$Actual[toplo$Filled %in% 'Retained'] <- NA
   toplo$Time <- 1:nrow(toplo)
   toplo <- tidyr::gather(toplo, 'Method', 'Value', -Time, -Filled, -Actual)
 
@@ -96,13 +96,15 @@ plot_impute <- function(dataIn, smps = 'mcar', methods = c("na.approx", "na.inte
     theme_bw() +
     theme(
       legend.position = 'top',
-      legend.key = element_blank()
+      legend.key = element_blank(),
+      legend.title = element_blank()
       )
 
   # add actual missing values if T
   if(showmiss)
     p <- p +
-      geom_point(aes(y = Actual), pch = 21, fill = NA, alpha = 0.75, na.rm = TRUE)
+      geom_point(aes(y = Actual, pch = 'Removed'), fill = NA, alpha = 0.75, na.rm = TRUE) +
+      scale_shape_manual(values = 21)
 
   return(p)
 

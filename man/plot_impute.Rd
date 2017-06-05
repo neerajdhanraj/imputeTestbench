@@ -23,12 +23,12 @@ plot_impute(dataIn, smps = "mcar", methods = c("na.approx", "na.interp",
 
 \item{missPercent}{numeric for percent of missing values to be considered}
 
-\item{showmiss}{logical if actual missing values are plotted}
+\item{showmiss}{logical if removed values missing from the complete dataset are plotted}
 
 \item{addl_arg}{arguments passed to other imputation methods as a list of lists, see details.}
 }
 \value{
-A \code{\link[ggplot2]{ggplot}} object showing the imputed data for each method.  Imputed data are colored as 'filled'.  Actual missing data can be added to the plot if \code{showmiss = TRUE}.
+A \code{\link[ggplot2]{ggplot}} object showing the imputed data for each method.  Red points are labelled as 'imputed' and blue points are labelled as 'retained' from the original data set.  Missing data that were removed can be added to the plot as open circles if \code{showmiss = TRUE}.
 }
 \description{
 Plot imputations for data from multiple methods

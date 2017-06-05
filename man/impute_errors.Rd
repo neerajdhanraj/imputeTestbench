@@ -38,7 +38,7 @@ impute_errors(dataIn, smps = "mcar", methods = c("na.approx", "na.interp",
 \item{addl_arg}{arguments passed to other imputation methods as a list of lists, see details.}
 }
 \value{
-Returns error comparison for imputation methods
+Returns an error comparison for imputation methods as an \code{errprof} object.  This object is structured as a list where the first two elements are named \code{Parameter} and \code{MissingPercent} that describe the error metric used to assess the imputation methods and the intervals of missing observations as percentages, respectively.  The remaining elements are named as the chr strings in \code{methods} of the original function call.  Each remaining element contains a numeric vector of the average error at each missing percent of observations.  The \code{errprof} object also includes an attribute named \code{errall} as an additional list that contains all of the error estimates for every imputation method and repetition.
 }
 \description{
 Function working as testbench for comparison of imputing models

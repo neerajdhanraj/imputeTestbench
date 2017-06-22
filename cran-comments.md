@@ -1,6 +1,6 @@
 ## Resubmission 
 
-This is a resubmission for a version update.  
+This is a resubmission for a version update. We have also changed the package title to title case and fixed the CRAN package link in README.md to canonical form.  
 
 ## Test environments
 

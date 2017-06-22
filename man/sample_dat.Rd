@@ -54,4 +54,3 @@ p + scale_colour_manual(values = c('black', 'grey'))
 p + theme_minimal()
 p + ggtitle('Example of simulating missing data')
 }
-

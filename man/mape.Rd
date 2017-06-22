@@ -24,4 +24,3 @@ y <- sample(1:4, 100, replace = TRUE)
 z <- mape(x, y)
 z
 }
-

@@ -81,4 +81,3 @@ impute_errors(dataIn = nottem, addl_arg = list(na.mean = list(option = 'mode')))
 \seealso{
 \code{\link{sample_dat}}
 }
-

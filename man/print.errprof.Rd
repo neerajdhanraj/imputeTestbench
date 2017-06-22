@@ -17,4 +17,3 @@ list output for the errprof object
 \description{
 Print method for errprof class
 }
-

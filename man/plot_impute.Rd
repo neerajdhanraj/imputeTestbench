@@ -57,4 +57,3 @@ p + theme_minimal()
 p + ggtitle('Imputation examples with different methods')
 p + scale_y_continuous('Temp at Nottingham Castle (F)')
 }
-

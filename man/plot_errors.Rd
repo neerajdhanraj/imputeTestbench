@@ -41,4 +41,3 @@ p + theme_minimal()
 p + ggtitle('Distribution of error for imputed values')
 p + scale_y_continuous('RMSE')
 }
-

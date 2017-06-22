@@ -15,14 +15,15 @@
 #'
 #' # default plot
 #' plot_errors(aa)
-#'
+#' \dontrun{
 #' # bar plot of averages at each repetition
 #' plot_errors(aa, plotType = 'bar')
 #'
 #' # line plot of averages at each repetition
 #' plot_errors(aa, plotType = 'line')
 #'
-#' #' # change the plot aesthetics
+#' # change the plot aesthetics
+#'
 #' library(ggplot2)
 #' p <- plot_errors(aa)
 #' p + scale_fill_brewer(palette = 'Paired', guide_legend(title = 'Default'))
@@ -30,6 +31,7 @@
 #' p + theme_minimal()
 #' p + ggtitle('Distribution of error for imputed values')
 #' p + scale_y_continuous('RMSE')
+#' }
 plot_errors <- function(dataIn, plotType = c('boxplot')) UseMethod('plot_errors')
 
 #' @rdname plot_errors

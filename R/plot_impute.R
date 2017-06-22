@@ -35,12 +35,14 @@
 #' plot_impute(dataIn = nottem, smps = 'mar')
 #'
 #' # change the plot aesthetics
+#' \dontrun{
 #' library(ggplot2)
 #' p <- plot_impute(dataIn = nottem, smps = 'mar')
 #' p + scale_colour_manual(values = c('black', 'grey'))
 #' p + theme_minimal()
 #' p + ggtitle('Imputation examples with different methods')
 #' p + scale_y_continuous('Temp at Nottingham Castle (F)')
+#' }
 plot_impute <- function(dataIn, smps = 'mcar', methods = c("na.approx", "na.interp", "na.interpolation", "na.locf", "na.mean"),  methodPath = NULL, blck = 50, blckper = TRUE, missPercent = 50, showmiss = FALSE, addl_arg = NULL){
 
   # source method if provided

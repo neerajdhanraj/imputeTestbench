@@ -6,4 +6,4 @@ bibentry(bibtype = "Manual",
          author = c(person("Marcus", "Beck"), person("Neeraj", "Bokde")),
          year = year,
          note = note,
-         url = "https://CRAN.R-project.org/package=ImputeTestBench")
+         url = "https://cran.r-project.org/package=imputeTestbench")

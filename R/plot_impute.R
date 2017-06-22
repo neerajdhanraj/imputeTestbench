@@ -2,17 +2,17 @@
 #'
 #' Plot imputations for data from multiple methods
 #'
-#' @param dataIn input \code{\link[stats]{ts}} for testing, defaults to \code{\link[datasets]{nottem}}
+#' @param dataIn input \code{\link[stats]{ts}} for testing
 #' @param smps chr string indicating sampling type for generating missing data, see details
 #' @param methods chr string of imputation methods to use, one to many.  A user-supplied function can be included if \code{MethodPath} is used.
 #' @param methodPath chr string of location of script containing one or more functions for the proposed imputation method(s)
-#' @param blck numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mcar'}
+#' @param blck numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mar'}
 #' @param blckper logical indicating if the value passed to \code{blck} is a percentage of the sample size for missing data, otherwise \code{blck} indicates number of observations
 #' @param missPercent numeric for percent of missing values to be considered
-#' @param showmiss logical if actual missing values are plotted
+#' @param showmiss logical if removed values missing from the complete dataset are plotted
 #' @param addl_arg arguments passed to other imputation methods as a list of lists, see details.
 #'
-#' @return A \code{\link[ggplot2]{ggplot}} object showing the imputed data for each method.  Imputed data are colored as 'filled'.  Actual missing data can be added to the plot if \code{showmiss = TRUE}.
+#' @return A \code{\link[ggplot2]{ggplot}} object showing the imputed data for each method.  Red points are labelled as 'imputed' and blue points are labelled as 'retained' from the original data set.  Missing data that were removed can be added to the plot as open circles if \code{showmiss = TRUE}. See the examples for modifying the plot.
 #'
 #' @import ggplot2
 #' @import zoo
@@ -22,12 +22,26 @@
 #' @export
 #'
 #' @examples
-#' plot_impute()
-plot_impute <- function(dataIn = NULL, smps = 'mcar', methods = c("na.approx", "na.interp", "na.interpolation", "na.locf", "na.mean"),  methodPath = NULL, blck = 50, blckper = TRUE, missPercent = 50, showmiss = FALSE, addl_arg = NULL){
-
-  # Sample Dataset 'nottem' is provided for testing in default case.
-  if(is.null(dataIn))
-    dataIn <- nottem
+#' # default
+#' plot_impute(dataIn = nottem)
+#'
+#' # change missing percent total
+#' plot_impute(dataIn = nottem, missPercent = 10)
+#'
+#' # show missing values
+#' plot_impute(dataIn = nottem, showmiss = TRUE)
+#'
+#' # use mar sampling
+#' plot_impute(dataIn = nottem, smps = 'mar')
+#'
+#' # change the plot aesthetics
+#' library(ggplot2)
+#' p <- plot_impute(dataIn = nottem, smps = 'mar')
+#' p + scale_colour_manual(values = c('black', 'grey'))
+#' p + theme_minimal()
+#' p + ggtitle('Imputation examples with different methods')
+#' p + scale_y_continuous('Temp at Nottingham Castle (F)')
+plot_impute <- function(dataIn, smps = 'mcar', methods = c("na.approx", "na.interp", "na.interpolation", "na.locf", "na.mean"),  methodPath = NULL, blck = 50, blckper = TRUE, missPercent = 50, showmiss = FALSE, addl_arg = NULL){
 
   # source method if provided
   if(!is.null(methodPath))
@@ -75,11 +89,11 @@ plot_impute <- function(dataIn = NULL, smps = 'mcar', methods = c("na.approx", "
   # prep for plot
   toplo <- do.call('cbind', c(imps))
   toplo <- data.frame(toplo)
-  toplo$Filled <- 0
-  toplo$Filled[is.na(out[[1]])] <- 1
+  toplo$Filled <- 'Retained'
+  toplo$Filled[is.na(out[[1]])] <- 'Imputed'
   toplo$Filled <- factor(toplo$Filled)
   toplo$Actual <- dataIn
-  toplo$Actual[toplo$Filled %in% '0'] <- NA
+  toplo$Actual[toplo$Filled %in% 'Retained'] <- NA
   toplo$Time <- 1:nrow(toplo)
   toplo <- tidyr::gather(toplo, 'Method', 'Value', -Time, -Filled, -Actual)
 
@@ -90,13 +104,15 @@ plot_impute <- function(dataIn = NULL, smps = 'mcar', methods = c("na.approx", "
     theme_bw() +
     theme(
       legend.position = 'top',
-      legend.key = element_blank()
+      legend.key = element_blank(),
+      legend.title = element_blank()
       )
 
   # add actual missing values if T
   if(showmiss)
     p <- p +
-      geom_point(aes(y = Actual), pch = 21, fill = NA, alpha = 0.75, na.rm = TRUE)
+      geom_point(aes(y = Actual, pch = 'Removed'), fill = NA, alpha = 0.75, na.rm = TRUE) +
+      scale_shape_manual(values = 21)
 
   return(p)
 

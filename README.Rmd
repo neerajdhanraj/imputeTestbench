@@ -3,7 +3,7 @@ output:
   html_document:
     keep_md: yes
     toc: no
-    self_contained: no
+    self_contained: yes
   pdf_document:
     toc: yes
 ---
@@ -24,7 +24,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This is the development repository for the imputeTestbench package.  This package provides a testbench for comparing imputation methods for missing data in univariate time series. 
 
-The development version of this package can be installed from Github:
+The development version of this package can be installed from GitHub:
 
 ```{r, eval = FALSE}
 install.packages('devtools')
@@ -44,7 +44,7 @@ The core function is `impute_errors()`.  See the help documentation for more det
 
 ```{r message = F}
 library(imputeTestbench)
-a <- impute_errors()
+a <- impute_errors(data = nottem)
 a
 plot_errors(a, plotType = 'line')
 ```

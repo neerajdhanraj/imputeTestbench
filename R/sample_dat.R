@@ -14,25 +14,45 @@
 #'
 #' The missing data if \code{smps = 'mar'} are based on random sampling by blocks.  The start location of each block is random and overlapping blocks are not counted uniquely for the required sample size given by \code{b}.  Final blocks are truncated to ensure the correct value of \code{b} is returned.  Blocks are fixed at 1 if the proportion is too small, in which case \code{"mcar"} should be used.  Block sizes are also truncated to the required sample size if the input value is too large if \code{blckper = FALSE}.  For the latter case, this is the same as setting \code{blck = 1} and \code{blckper = TRUE}.
 #'
+#' For all cases, the first and last oservation will never be removed to allow comparability of interpolation schemes.  This is especially relevant for cases when \code{b} is large and \code{smps = 'mar'} is used.  For example, \code{method = na.approx} will have rmse = 0 for a dataset where the removed block includes the last n observations. This result could provide misleading information in comparing methods.
+#'
 #' @export
 #'
 #' @import dplyr ggplot2
 #'
 #' @examples
 #' a <- rnorm(1000)
+#'
+#' # default sampling
 #' sample_dat(a)
+#'
+#' # use mar sampling
 #' sample_dat(a, smps = 'mar')
+#'
+#' # show a plot of one repetition
 #' sample_dat(a, plot = TRUE)
+#'
+#' # show a plot of one repetition, mar sampling
 #' sample_dat(a, smps = 'mar', plot = TRUE)
-sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50, blckper = TRUE, plot = FALSE){
+#'
+#' # change plot aesthetics
+#' library(ggplot2)
+#' p <- sample_dat(a, plot = TRUE)
+#' p + scale_colour_manual(values = c('black', 'grey'))
+#' p + theme_minimal()
+#' p + ggtitle('Example of simulating missing data')
+sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 10, blck = 50, blckper = TRUE, plot = FALSE){
 
   # sanity checks
   if(!smps %in% c('mcar', 'mar'))
     stop('smps must be mcar or mar')
 
+  # upper sample value
+  upp <- length(datin) -1
+
   # sample to take for missing data given x
-  pool <- 1:length(datin)
-  torm <- round(length(pool) * b/100)
+  pool <- 2:upp
+  torm <- round(length(datin) * b/100)
   out <- vector('list', length = repetition)
 
   # sampling complately at random
@@ -75,7 +95,6 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50,
 
     }
 
-
     # get number of samples for initial grab
     blck_sd <- floor(torm/blck)
 
@@ -84,18 +103,19 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50,
 
       # pool is the number of obs up to the max minus blck size
       # ensures that those on the right do not overlap the end
-      pool <- 1:(length(datin) - blck + 1)
+      pool <- 2:(length(datin) - blck + 1)
 
       # initial grab
       grbs <- sample(pool, blck_sd, replace = F) %>%
         sapply(function(x) x:(x + blck - 1)) %>%
         c %>%
         unique %>%
-        .[. <= length(datin)] %>%
+        .[. <= upp] %>%
         sort
 
       # adjust sampling pool and number of samples left
-      pool <- pool[!pool %in% grbs]
+      pool <- 2:upp %>%
+        .[!. %in% grbs]
       lft <- torm - length(grbs)
 
       # continue sampling one block at a time until enough samples in missper
@@ -109,10 +129,11 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50,
         grbs <- c(grbs, grbs_tmp) %>%
           unique %>%
           sort %>%
-          .[. <= length(datin)]
+          .[. <= upp]
 
         # update samples left and sample pool
         lft <- torm - length(grbs)
+
         pool <- pool[!pool %in% grbs]
 
       }
@@ -130,11 +151,11 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50,
   if(plot){
 
     miss <- is.na(out[[1]])
-    toplo <- data.frame(x = 1:length(datin), y = datin, col = 'Observed', stringsAsFactors = FALSE)
+    toplo <- data.frame(x = 1:length(datin), y = datin, col = 'Retained', stringsAsFactors = FALSE)
     toplo$col[miss] <- 'Removed'
     p <- ggplot(toplo, aes(x = x, y = y, shape = col, colour = col)) +
-      scale_shape_manual(values = c(16, 21)) +
-      scale_colour_manual(values = c('#F8766D', 'black')) +
+      scale_shape_manual(values = c(21, 16)) +
+      scale_colour_manual(values = c('black', '#00BFC4')) +
       geom_point(alpha = 0.75) +
       theme_bw() +
       theme(
@@ -146,10 +167,8 @@ sample_dat <- function(datin, smps = 'mcar', repetition = 10, b = 50, blck = 50,
       ggtitle(lab)
     return(p)
 
-  } else {
-
-    return(out)
-
   }
+
+  return(out)
 
 }

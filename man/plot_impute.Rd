@@ -4,13 +4,12 @@
 \alias{plot_impute}
 \title{Plot imputations}
 \usage{
-plot_impute(dataIn = NULL, smps = "mcar", methods = c("na.approx",
-  "na.interp", "na.interpolation", "na.locf", "na.mean"), methodPath = NULL,
-  blck = 50, blckper = TRUE, missPercent = 50, showmiss = FALSE,
-  addl_arg = NULL)
+plot_impute(dataIn, smps = "mcar", methods = c("na.approx", "na.interp",
+  "na.interpolation", "na.locf", "na.mean"), methodPath = NULL, blck = 50,
+  blckper = TRUE, missPercent = 50, showmiss = FALSE, addl_arg = NULL)
 }
 \arguments{
-\item{dataIn}{input \code{\link[stats]{ts}} for testing, defaults to \code{\link[datasets]{nottem}}}
+\item{dataIn}{input \code{\link[stats]{ts}} for testing}
 
 \item{smps}{chr string indicating sampling type for generating missing data, see details}
 
@@ -18,18 +17,18 @@ plot_impute(dataIn = NULL, smps = "mcar", methods = c("na.approx",
 
 \item{methodPath}{chr string of location of script containing one or more functions for the proposed imputation method(s)}
 
-\item{blck}{numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mcar'}}
+\item{blck}{numeric indicating block sizes as a percentage of the sample size for the missing data, applies only if \code{smps = 'mar'}}
 
 \item{blckper}{logical indicating if the value passed to \code{blck} is a percentage of the sample size for missing data, otherwise \code{blck} indicates number of observations}
 
 \item{missPercent}{numeric for percent of missing values to be considered}
 
-\item{showmiss}{logical if actual missing values are plotted}
+\item{showmiss}{logical if removed values missing from the complete dataset are plotted}
 
 \item{addl_arg}{arguments passed to other imputation methods as a list of lists, see details.}
 }
 \value{
-A \code{\link[ggplot2]{ggplot}} object showing the imputed data for each method.  Imputed data are colored as 'filled'.  Actual missing data can be added to the plot if \code{showmiss = TRUE}.
+A \code{\link[ggplot2]{ggplot}} object showing the imputed data for each method.  Red points are labelled as 'imputed' and blue points are labelled as 'retained' from the original data set.  Missing data that were removed can be added to the plot as open circles if \code{showmiss = TRUE}. See the examples for modifying the plot.
 }
 \description{
 Plot imputations for data from multiple methods
@@ -38,6 +37,24 @@ Plot imputations for data from multiple methods
 See the documentation for \code{\link{impute_errors}} for an explanation of the arguments.
 }
 \examples{
-plot_impute()
+# default
+plot_impute(dataIn = nottem)
+
+# change missing percent total
+plot_impute(dataIn = nottem, missPercent = 10)
+
+# show missing values
+plot_impute(dataIn = nottem, showmiss = TRUE)
+
+# use mar sampling
+plot_impute(dataIn = nottem, smps = 'mar')
+
+# change the plot aesthetics
+library(ggplot2)
+p <- plot_impute(dataIn = nottem, smps = 'mar')
+p + scale_colour_manual(values = c('black', 'grey'))
+p + theme_minimal()
+p + ggtitle('Imputation examples with different methods')
+p + scale_y_continuous('Temp at Nottingham Castle (F)')
 }
 

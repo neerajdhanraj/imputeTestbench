@@ -4,14 +4,14 @@
 \alias{impute_errors}
 \title{Function working as testbench for comparison of imputing models}
 \usage{
-impute_errors(dataIn = NULL, smps = "mcar", methods = c("na.approx",
-  "na.interp", "na.interpolation", "na.locf", "na.mean"), methodPath = NULL,
+impute_errors(dataIn, smps = "mcar", methods = c("na.approx", "na.interp",
+  "na.interpolation", "na.locf", "na.mean"), methodPath = NULL,
   errorParameter = "rmse", errorPath = NULL, blck = 50, blckper = TRUE,
   missPercentFrom = 10, missPercentTo = 90, interval = 10,
   repetition = 10, addl_arg = NULL)
 }
 \arguments{
-\item{dataIn}{input \code{\link[stats]{ts}} for testing, defaults to \code{\link[datasets]{nottem}}}
+\item{dataIn}{input \code{\link[stats]{ts}} for testing}
 
 \item{smps}{chr string indicating sampling type for generating missing data, see details}
 
@@ -38,7 +38,7 @@ impute_errors(dataIn = NULL, smps = "mcar", methods = c("na.approx",
 \item{addl_arg}{arguments passed to other imputation methods as a list of lists, see details.}
 }
 \value{
-Returns error comparison for imputation methods
+Returns an error comparison for imputation methods as an \code{errprof} object.  This object is structured as a list where the first two elements are named \code{Parameter} and \code{MissingPercent} that describe the error metric used to assess the imputation methods and the intervals of missing observations as percentages, respectively.  The remaining elements are named as the chr strings in \code{methods} of the original function call.  Each remaining element contains a numeric vector of the average error at each missing percent of observations.  The \code{errprof} object also includes an attribute named \code{errall} as an additional list that contains all of the error estimates for every imputation method and repetition.
 }
 \description{
 Function working as testbench for comparison of imputing models
@@ -53,12 +53,30 @@ An alternative error function can also be passed to \code{errorParameter} if \co
 The \code{smps} argument indicates the type of sampling for generating missing data.  Options are \code{smps = 'mcar'} for missing completely at random and \code{smps = 'mar'} for missing at random.  Additional information about the sampling method is described in \code{\link{sample_dat}}. The relevant arguments for \code{smps = 'mar'} are \code{blck} and \code{blckper} which greatly affect the sampling method.
 }
 \examples{
-aa <- impute_errors()
+\dontrun{
+# default options
+aa <- impute_errors(dataIn = nottem)
+aa
+plot_errors(aa)
+
+# change the simulation for missing obs
+aa <- impute_errors(dataIn = nottem, smps = 'mar')
+aa
+plot_errors(aa)
+
+# use one interpolation method, increase repetitions
+aa <- impute_errors(dataIn = nottem, methods = 'na.interp', repetition = 100)
+aa
+plot_errors(aa)
+
+# change the error metric
+aa <- impute_errors(dataIn = nottem, errorParameter = 'mae')
 aa
 plot_errors(aa)
 
 # passing addtional arguments to imputation methods
-impute_errors(addl_arg = list(na.mean = list(option = 'mode')))
+impute_errors(dataIn = nottem, addl_arg = list(na.mean = list(option = 'mode')))
+}
 }
 \seealso{
 \code{\link{sample_dat}}

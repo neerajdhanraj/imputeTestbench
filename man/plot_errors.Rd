@@ -5,16 +5,14 @@
 \alias{plot_errors.errprof}
 \title{Function to plot the Error Comparison}
 \usage{
-plot_errors(dataIn, ...)
+plot_errors(dataIn, plotType = c("boxplot"))
 
-\method{plot_errors}{errprof}(dataIn, plotType = c("boxplot"), ...)
+\method{plot_errors}{errprof}(dataIn, plotType = c("boxplot"))
 }
 \arguments{
 \item{dataIn}{an errprof object returned from \code{\link{impute_errors}}}
 
 \item{plotType}{chr string indicating plot type, accepted values are \code{"boxplot"}, \code{"bar"}, or \code{"line"}}
-
-\item{\dots}{arguments passed to or from other methods}
 }
 \value{
 A ggplot object that can be further modified.  The entire range of errors are shown if \code{plotType = "boxplot"}, otherwise the averages are shown if \code{plotType = "bar"} or \code{"line"}.
@@ -23,9 +21,24 @@ A ggplot object that can be further modified.  The entire range of errors are sh
 Function to plot the Error Comparison
 }
 \examples{
-aa <- impute_errors()
+aa <- impute_errors(dataIn = nottem)
+
+# default plot
 plot_errors(aa)
+
+# bar plot of averages at each repetition
 plot_errors(aa, plotType = 'bar')
+
+# line plot of averages at each repetition
 plot_errors(aa, plotType = 'line')
+
+#' # change the plot aesthetics
+library(ggplot2)
+p <- plot_errors(aa)
+p + scale_fill_brewer(palette = 'Paired', guide_legend(title = 'Default'))
+p + theme(legend.position = 'top')
+p + theme_minimal()
+p + ggtitle('Distribution of error for imputed values')
+p + scale_y_continuous('RMSE')
 }
 

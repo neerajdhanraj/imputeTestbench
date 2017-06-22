@@ -4,7 +4,7 @@
 \alias{sample_dat}
 \title{Sample time series data}
 \usage{
-sample_dat(datin, smps = "mcar", repetition = 10, b = 50, blck = 50,
+sample_dat(datin, smps = "mcar", repetition = 10, b = 10, blck = 50,
   blckper = TRUE, plot = FALSE)
 }
 \arguments{
@@ -26,15 +26,32 @@ sample_dat(datin, smps = "mcar", repetition = 10, b = 50, blck = 50,
 Input data with \code{NA} values for the sampled observations if \code{plot = FALSE}, otherwise a plot showing the missing observations over the complete dataset.
 
 The missing data if \code{smps = 'mar'} are based on random sampling by blocks.  The start location of each block is random and overlapping blocks are not counted uniquely for the required sample size given by \code{b}.  Final blocks are truncated to ensure the correct value of \code{b} is returned.  Blocks are fixed at 1 if the proportion is too small, in which case \code{"mcar"} should be used.  Block sizes are also truncated to the required sample size if the input value is too large if \code{blckper = FALSE}.  For the latter case, this is the same as setting \code{blck = 1} and \code{blckper = TRUE}.
+
+For all cases, the first and last oservation will never be removed to allow comparability of interpolation schemes.  This is especially relevant for cases when \code{b} is large and \code{smps = 'mar'} is used.  For example, \code{method = na.approx} will have rmse = 0 for a dataset where the removed block includes the last n observations. This result could provide misleading information in comparing methods.
 }
 \description{
 Sample time series using completely at random (MCAR) or at random (MAR)
 }
 \examples{
 a <- rnorm(1000)
+
+# default sampling
 sample_dat(a)
+
+# use mar sampling
 sample_dat(a, smps = 'mar')
+
+# show a plot of one repetition
 sample_dat(a, plot = TRUE)
+
+# show a plot of one repetition, mar sampling
 sample_dat(a, smps = 'mar', plot = TRUE)
+
+# change plot aesthetics
+library(ggplot2)
+p <- sample_dat(a, plot = TRUE)
+p + scale_colour_manual(values = c('black', 'grey'))
+p + theme_minimal()
+p + ggtitle('Example of simulating missing data')
 }
 

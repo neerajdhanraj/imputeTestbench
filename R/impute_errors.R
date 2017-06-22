@@ -1,6 +1,6 @@
 #' Function working as testbench for comparison of imputing models
 #'
-#' @param dataIn input \code{\link[stats]{ts}} for testing, defaults to \code{\link[datasets]{nottem}}
+#' @param dataIn input \code{\link[stats]{ts}} for testing
 #' @param smps chr string indicating sampling type for generating missing data, see details
 #' @param methods chr string of imputation methods to use, one to many.  A user-supplied function can be included if \code{MethodPath} is used, see details.
 #' @param methodPath chr string of location of script containing one or more functions for the proposed imputation method(s)
@@ -30,23 +30,37 @@
 #'
 #' @seealso \code{\link{sample_dat}}
 #'
-#' @return Returns error comparison for imputation methods
+#' @return Returns an error comparison for imputation methods as an \code{errprof} object.  This object is structured as a list where the first two elements are named \code{Parameter} and \code{MissingPercent} that describe the error metric used to assess the imputation methods and the intervals of missing observations as percentages, respectively.  The remaining elements are named as the chr strings in \code{methods} of the original function call.  Each remaining element contains a numeric vector of the average error at each missing percent of observations.  The \code{errprof} object also includes an attribute named \code{errall} as an additional list that contains all of the error estimates for every imputation method and repetition.
 #'
 #' @export
 #'
 #' @examples
-#' aa <- impute_errors()
+#' \dontrun{
+#' # default options
+#' aa <- impute_errors(dataIn = nottem)
+#' aa
+#' plot_errors(aa)
+#'
+#' # change the simulation for missing obs
+#' aa <- impute_errors(dataIn = nottem, smps = 'mar')
+#' aa
+#' plot_errors(aa)
+#'
+#' # use one interpolation method, increase repetitions
+#' aa <- impute_errors(dataIn = nottem, methods = 'na.interp', repetition = 100)
+#' aa
+#' plot_errors(aa)
+#'
+#' # change the error metric
+#' aa <- impute_errors(dataIn = nottem, errorParameter = 'mae')
 #' aa
 #' plot_errors(aa)
 #'
 #' # passing addtional arguments to imputation methods
-#' impute_errors(addl_arg = list(na.mean = list(option = 'mode')))
-impute_errors <- function(dataIn = NULL, smps = 'mcar', methods = c("na.approx", "na.interp", "na.interpolation", "na.locf", "na.mean"),  methodPath = NULL, errorParameter = 'rmse', errorPath = NULL, blck = 50, blckper = TRUE, missPercentFrom = 10, missPercentTo = 90, interval = 10, repetition = 10, addl_arg = NULL)
+#' impute_errors(dataIn = nottem, addl_arg = list(na.mean = list(option = 'mode')))
+#' }
+impute_errors <- function(dataIn, smps = 'mcar', methods = c("na.approx", "na.interp", "na.interpolation", "na.locf", "na.mean"),  methodPath = NULL, errorParameter = 'rmse', errorPath = NULL, blck = 50, blckper = TRUE, missPercentFrom = 10, missPercentTo = 90, interval = 10, repetition = 10, addl_arg = NULL)
 {
-
-  # Sample Dataset 'nottem' is provided for testing in default case.
-  if(is.null(dataIn))
-    dataIn <- nottem
 
   # source method if provided
   if(!is.null(methodPath))
@@ -88,6 +102,7 @@ impute_errors <- function(dataIn = NULL, smps = 'mcar', methods = c("na.approx",
 
     # create the missing data for imputation
     b <- percs[x]
+
     out <- sample_dat(dataIn, smps = smps, b = b, repetition = repetition,
       blck = blck, blckper = blckper, plot = FALSE)
 

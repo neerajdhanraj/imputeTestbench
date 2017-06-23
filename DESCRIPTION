@@ -3,7 +3,7 @@ Type: Package
 Title: Test Bench for the Comparison of Imputation Methods
 Date: 2017-06-22
 Maintainer: Marcus W. Beck <mbafs2012@gmail.com>
-Version: 3.0.1
+Version: 3.0.1.9000
 Description: Provides a test bench for the comparison of missing data imputation 
     methods in uni-variate time series. Imputation methods are compared using 
     different error metrics. Proposed imputation methods and alternative error 

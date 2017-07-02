@@ -23,6 +23,8 @@
 #'
 #' The \code{smps} argument indicates the type of sampling for generating missing data.  Options are \code{smps = 'mcar'} for missing completely at random and \code{smps = 'mar'} for missing at random.  Additional information about the sampling method is described in \code{\link{sample_dat}}. The relevant arguments for \code{smps = 'mar'} are \code{blck} and \code{blckper} which greatly affect the sampling method.
 #'
+#' Infinite comparisons are removed with a warning if \code{errorParameter = 'mape'}. This occurs if any of the observed values in the original time series are zero.  Error estimates for such datasets are evaluated only for non-zero observations.
+#'
 #' @import forecast
 #' @importFrom imputeTS na.interpolation na.mean
 #' @importFrom stats ts

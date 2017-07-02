@@ -57,8 +57,19 @@ mae <- function(obs, pred)
 # Function that returns Mean Absolute Error
 mape <- function(obs, pred)
 {
-  mapeVal <- mean(abs(obs - pred)* 100/obs, na.rm = TRUE)
+
+  mapeVal <- abs(obs - pred)* 100/obs
+
+  # check if infinite values
+  chk <- is.infinite(mapeVal)
+  if(any(chk)){
+    warning('Infinite values removed with MAPE')
+    mapeVal <- mapeVal[!chk]
+  }
+
+  mapeVal <- mean(mapeVal, na.rm = TRUE)
   return(mapeVal)
+
 }
 
 #==============================================================================================

@@ -58,7 +58,7 @@ mae <- function(obs, pred)
 mape <- function(obs, pred)
 {
 
-  mapeVal <- abs(obs - pred)* 100/obs
+  mapeVal <- abs((obs - pred) / obs)
 
   # check if infinite values
   chk <- is.infinite(mapeVal)
@@ -67,7 +67,7 @@ mape <- function(obs, pred)
     mapeVal <- mapeVal[!chk]
   }
 
-  mapeVal <- mean(mapeVal, na.rm = TRUE)
+  mapeVal <- 100 * mean(mapeVal, na.rm = TRUE)
   return(mapeVal)
 
 }

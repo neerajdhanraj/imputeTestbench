@@ -76,6 +76,8 @@ plot_errors(a, plotType = 'line')
 
 #### Citation
 
+Marcus W Beck, Neeraj Bokde, Gualberto Asencio-Cortés and Kishore Kulat, (2018). R Package imputeTestbench to Compare Imputation Methods for Univariate Time Series, The R Journal, 10:1, pages 218-233.
+
 Neeraj Bokde and Marcus W. Beck (2016). imputeTestbench: Test Bench for the comparison of imputation methods. R package version 3.0. http://www.neerajbokde.com/cran/imputetestbench
 
 #### Bug reports 
